@@ -1,109 +1,163 @@
-// ===== Site settings: edit these two lines =====
-// Email that "Request a scan" messages go to.
-const CONTACT_EMAIL = "you@example.com";
-// Link to a live sample tour (e.g. a Matterport share link). Leave "" to show the "Ask for a sample" box.
-const SAMPLE_TOUR_URL = "";
-// ===============================================
+// ================= SITE SETTINGS =================
+// Free form delivery: create an access key at https://web3forms.com using
+// foster3dtours@gmail.com, then paste it here. Until it's set, the form
+// opens the visitor's email app with the request filled in instead.
+const WEB3FORMS_KEY = "";
+const CONTACT_EMAIL = "foster3dtours@gmail.com";
 
-// --- Hero illustration: scan points placed on the isometric floor plan ---
-(function drawScanPoints() {
-  const svg = document.getElementById("dollhouse");
-  if (!svg) return;
-  const NS = "http://www.w3.org/2000/svg";
-  // points in floor-plan coordinates (same space as the <g transform> in index.html)
-  const points = [
-    { x: 170, y: 225, label: "Entry" },
-    { x: 60,  y: 212, label: "Bath" },
-    { x: 165, y: 115, label: "Living room" },
-    { x: 310, y: 60,  label: "Kitchen" },
-    { x: 300, y: 185, label: "Bedroom" },
-  ];
-  const iso = (p) => ({ x: 0.866 * (p.x - p.y), y: 0.5 * (p.x + p.y) });
-  const screen = points.map(iso);
+// Portfolio: Matterport model IDs (the part after "?m=" in a tour link).
+// Add, remove or reorder tours here.
+const TOURS = [
+  { id: "m8MNNAzBDPK", title: "Knob Hill Inn Lobby", type: "Hotel lobby" },
+  { id: "CShim2B3aps", title: "480 Walnut Ave N", type: "Home" },
+  { id: "fcxhmSfnLGy", title: "110 Stonegate Cir", type: "Home" },
+  { id: "FarDYhNKNSx", title: "Baldy Suite", type: "Hotel suite" },
+  { id: "zkcMVtkVpgF", title: "Sun Valley Suite", type: "Hotel suite" },
+  { id: "1GzCup4WYiF", title: "One-Bedroom Suite", type: "Hotel suite" },
+  { id: "5hC8AHg7KNF", title: "102 Hardrock Ln", type: "Home" },
+];
+// =================================================
 
-  const path = document.getElementById("scan-path");
-  path.setAttribute("points", screen.map((s) => `${s.x.toFixed(1)},${s.y.toFixed(1)}`).join(" "));
+const thumb = (id) => `https://my.matterport.com/api/v2/player/models/${id}/thumb/`;
+const embed = (id) => `https://my.matterport.com/show/?m=${id}&play=1&qs=1&brand=0`;
 
-  const group = document.getElementById("scan-points");
-  screen.forEach((s, i) => {
-    const g = document.createElementNS(NS, "g");
-    g.setAttribute("class", "scan-dot");
-    g.style.setProperty("--d", `${0.4 + i * 0.42}s`);
-    const halo = document.createElementNS(NS, "ellipse");
-    halo.setAttribute("class", "halo");
-    halo.setAttribute("cx", s.x); halo.setAttribute("cy", s.y);
-    halo.setAttribute("rx", 20); halo.setAttribute("ry", 11);
-    const core = document.createElementNS(NS, "circle");
-    core.setAttribute("class", "core");
-    core.setAttribute("cx", s.x); core.setAttribute("cy", s.y - 2); core.setAttribute("r", 7);
-    const t = document.createElementNS(NS, "text");
-    t.setAttribute("x", s.x + 14); t.setAttribute("y", s.y - 12);
-    t.textContent = points[i].label;
-    g.append(halo, core, t);
-    group.appendChild(g);
+// ---- Portfolio grid ----
+(function buildWork() {
+  const grid = document.getElementById("work-grid");
+  if (!grid) return;
+  TOURS.forEach((t, i) => {
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <button class="work-card" type="button" data-model="${t.id}" data-title="${t.title}">
+        <span class="work-thumb"><img src="${thumb(t.id)}" alt="Inside ${t.title}" loading="${i < 2 ? "eager" : "lazy"}" width="3034" height="1707"></span>
+        <span class="work-meta"><strong>${t.title}</strong><span>${t.type}</span></span>
+      </button>`;
+    grid.appendChild(li);
+  });
+})();
+
+// ---- Tour viewer (iframe loads only when opened, so the page stays fast) ----
+(function tourViewer() {
+  const dialog = document.getElementById("tour-dialog");
+  const frame = document.getElementById("tour-dialog-frame");
+  const title = document.getElementById("tour-dialog-title");
+  const closeBtn = document.getElementById("tour-dialog-close");
+  const cta = document.getElementById("tour-dialog-cta");
+  let opener = null;
+
+  function open(id, name, from) {
+    opener = from;
+    title.textContent = name;
+    frame.innerHTML = `<iframe src="${embed(id)}" title="3D tour of ${name}" allow="fullscreen; xr-spatial-tracking" allowfullscreen></iframe>`;
+    if (dialog.showModal) dialog.showModal(); else dialog.setAttribute("open", "");
+    document.body.style.overflow = "hidden";
+  }
+  function close() {
+    if (dialog.open) dialog.close();
+  }
+  dialog.addEventListener("close", () => {
+    frame.innerHTML = "";
+    document.body.style.overflow = "";
+    if (opener) opener.focus();
+  });
+  closeBtn.addEventListener("click", close);
+  cta.addEventListener("click", close);
+  dialog.addEventListener("click", (e) => { if (e.target === dialog) close(); });
+
+  document.addEventListener("click", (e) => {
+    const card = e.target.closest(".work-card");
+    if (card) open(card.dataset.model, card.dataset.title, card);
   });
 
-  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (!reduce) {
-    const len = path.getTotalLength ? path.getTotalLength() : 1000;
-    path.style.setProperty("--len", len);
-    svg.classList.add("is-animating");
-    path.addEventListener("animationend", () => {
-      svg.classList.remove("is-animating");
-      svg.classList.add("is-done");
-    }, { once: true });
+  // Hero: swap the photo for the live tour in place
+  const stage = document.querySelector(".tour-stage");
+  const play = stage && stage.querySelector(".tour-play");
+  if (play) {
+    play.addEventListener("click", () => {
+      const id = stage.dataset.model;
+      const iframe = document.createElement("iframe");
+      iframe.src = embed(id);
+      iframe.title = `3D tour of ${stage.dataset.title}`;
+      iframe.allow = "fullscreen; xr-spatial-tracking";
+      iframe.allowFullscreen = true;
+      stage.appendChild(iframe);
+      play.remove();
+      iframe.focus();
+    });
   }
 })();
 
-// --- Sample tour embed ---
-(function sampleTour() {
-  if (!SAMPLE_TOUR_URL) return;
-  const frame = document.getElementById("tour-frame");
-  frame.innerHTML = "";
-  frame.classList.remove("is-empty");
-  document.getElementById("sample-hint").hidden = false;
-  const iframe = document.createElement("iframe");
-  iframe.src = SAMPLE_TOUR_URL;
-  iframe.title = "Sample 3D tour";
-  iframe.loading = "lazy";
-  iframe.allow = "fullscreen; xr-spatial-tracking";
-  iframe.allowFullscreen = true;
-  frame.appendChild(iframe);
-})();
+// ---- Pricing buttons pre-select the property type ----
+document.querySelectorAll("[data-type]").forEach((a) => {
+  a.addEventListener("click", () => {
+    const sel = document.getElementById("q-type");
+    if (sel) sel.value = a.dataset.type;
+  });
+});
 
-// --- Contact form: opens the visitor's email app with the details filled in ---
-(function contactForm() {
-  const form = document.getElementById("contact-form");
+// ---- Quote form ----
+(function quoteForm() {
+  const form = document.getElementById("quote-form");
   const status = document.getElementById("form-status");
   if (!form) return;
+  const btn = form.querySelector('button[type="submit"]');
 
-  form.addEventListener("submit", (e) => {
+  function setStatus(msg, kind) {
+    status.textContent = msg;
+    status.className = "form-status" + (kind ? " " + kind : "");
+  }
+
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    status.classList.remove("error");
     const name = form.name.value.trim();
     const email = form.email.value.trim();
-    let firstBad = null;
-    [["name", name.length > 0], ["email", /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)]].forEach(([field, ok]) => {
-      form[field].setAttribute("aria-invalid", ok ? "false" : "true");
-      if (!ok && !firstBad) firstBad = form[field];
+    let bad = null;
+    [["name", name.length > 0], ["email", /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)]].forEach(([f, ok]) => {
+      form[f].setAttribute("aria-invalid", ok ? "false" : "true");
+      if (!ok && !bad) bad = form[f];
     });
-    if (firstBad) {
-      status.textContent = "Add your name and a valid email so we can reply.";
-      status.classList.add("error");
-      firstBad.focus();
+    if (bad) { setStatus("Please add your name and a valid email so we can reply.", "error"); bad.focus(); return; }
+    if (form.botcheck.checked) return;
+
+    const data = {
+      name, email,
+      phone: form.phone.value.trim(),
+      property_type: form.property_type.value,
+      size_sqft: form.size.value.trim(),
+      location: form.location.value.trim(),
+      message: form.message.value.trim(),
+    };
+
+    if (!WEB3FORMS_KEY) {
+      const body = Object.entries(data).map(([k, v]) => `${k.replace("_", " ")}: ${v || "-"}`).join("\n");
+      window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("Quote request: " + data.property_type)}&body=${encodeURIComponent(body)}`;
+      setStatus("Your email app should open with the request ready to send.");
       return;
     }
-    const lines = [
-      `Name: ${name}`,
-      `Email: ${email}`,
-      `Building address: ${form.address.value.trim() || "-"}`,
-      `Units: ${form.units.value.trim() || "-"}`,
-      "",
-      form.message.value.trim(),
-    ];
-    const subject = `Scan request${form.address.value.trim() ? " for " + form.address.value.trim() : ""}`;
-    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join("\n"))}`;
-    status.textContent = "Your email app should open with the request ready to send.";
+
+    btn.disabled = true;
+    setStatus("Sending…");
+    try {
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_KEY,
+          subject: `New quote request: ${data.property_type}`,
+          from_name: "Foster 3D Tours website",
+          replyto: email,
+          ...data,
+        }),
+      });
+      const json = await res.json();
+      if (!json.success) throw new Error(json.message);
+      form.reset();
+      setStatus("Thanks! We got your request and will reply within one business day.", "ok");
+    } catch (err) {
+      setStatus(`That didn't go through. Please email ${CONTACT_EMAIL} or call (208) 720-4772.`, "error");
+    } finally {
+      btn.disabled = false;
+    }
   });
 })();
 

@@ -3,179 +3,326 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Foster 3D Tours — 3D tours for New York apartments</title>
-  <meta name="description" content="Foster 3D Tours scans New York apartment buildings and turns them into 3D tours prospects can walk through on any phone or laptop.">
+  <title>Foster 3D Tours | Matterport 3D Virtual Tours, NYC & Wood River Valley</title>
+  <meta name="description" content="Professional Matterport 3D tours for listings, rentals, commercial spaces and construction. Scanned in 1–2 hours, delivered in 24–48. From $199.">
+  <meta property="og:title" content="Foster 3D Tours">
+  <meta property="og:description" content="Matterport 3D tours for listings, rentals, commercial spaces and construction. From $199.">
+  <meta property="og:image" content="https://my.matterport.com/api/v2/player/models/5hC8AHg7KNF/thumb/">
+  <meta property="og:type" content="website">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://my.matterport.com">
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Foster 3D Tours",
+    "description": "Professional Matterport 3D virtual tours for real estate, rentals, commercial properties and construction.",
+    "email": "foster3dtours@gmail.com",
+    "telephone": "+1-208-720-4772",
+    "address": { "@type": "PostalAddress", "streetAddress": "1410 Shadybrook Dr", "addressLocality": "Hailey", "addressRegion": "ID", "addressCountry": "US" },
+    "areaServed": ["New York metropolitan area", "Wood River Valley, Idaho"],
+    "priceRange": "$$",
+    "sameAs": ["https://www.linkedin.com/company/foster-3d-tours/"]
+  }
+  </script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
 
-  <header class="site-header">
+  <header class="site-header" id="top">
     <div class="wrap header-inner">
-      <a class="brand" href="#top" aria-label="Foster 3D Tours home">
-        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3 28 10v12L16 29 4 22V10z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><circle cx="16" cy="16" r="3.6" fill="var(--scan)"/></svg>
+      <a class="brand" href="#top" aria-label="Foster 3D Tours, back to top">
+        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2.5 28 9.5v13L16 29.5 4 22.5v-13z" fill="currentColor"/><path d="M16 16 28 9.5M16 16v13.5M16 16 4 9.5" stroke="#fff" stroke-width="1.6" fill="none"/></svg>
         <span>Foster 3D Tours</span>
       </a>
-      <nav aria-label="Main">
-        <a href="#what">What you get</a>
-        <a href="#how">How it works</a>
-        <a href="#contact" class="nav-cta">Request a scan</a>
+      <nav class="nav" aria-label="Main">
+        <a href="#work">Our work</a>
+        <a href="#services">Services</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#faq">FAQ</a>
       </nav>
+      <div class="header-actions">
+        <a class="header-phone" href="tel:+12087204772">(208) 720-4772</a>
+        <a class="btn btn-primary btn-sm" href="#quote">Get a quote</a>
+      </div>
     </div>
   </header>
 
   <main id="main">
-    <section class="hero" id="top">
+    <!-- HERO -->
+    <section class="hero">
       <div class="wrap hero-grid">
         <div class="hero-copy">
-          <h1>Let renters walk through the apartment before they visit.</h1>
-          <p class="lede">We scan New York apartment buildings and turn each unit into a 3D tour that opens on any phone or laptop. Prospects look around on their own time, and your showings go to people who already like the place.</p>
+          <p class="hero-kicker">Matterport 3D tours in New York and the Wood River Valley</p>
+          <h1>Let buyers and renters walk through before they ever book a showing.</h1>
+          <p class="lede">We scan your property with a Matterport Pro2 camera and deliver a 3D tour you can put on any listing, website or text message. Scanning takes about two hours. Your tour arrives in 24 to 48.</p>
           <div class="hero-actions">
-            <a class="btn btn-primary" href="#contact">Request a scan</a>
-            <a class="btn btn-quiet" href="#sample">See a sample tour</a>
+            <a class="btn btn-primary" href="#quote">Get a free quote</a>
+            <a class="btn btn-ghost" href="#work">See our tours</a>
           </div>
+          <ul class="hero-facts" aria-label="Key facts">
+            <li><strong>From $199</strong><span>per property</span></li>
+            <li><strong>24–48 hrs</strong><span>to delivery</span></li>
+            <li><strong>1 yr</strong><span>hosting included</span></li>
+          </ul>
         </div>
-        <figure class="hero-figure" aria-label="Illustration: a one-bedroom apartment in 3D, with the points where the camera captures each room">
-          <svg id="dollhouse" viewBox="-250 -90 620 440" role="img" aria-labelledby="dh-title">
-            <title id="dh-title">A one-bedroom apartment shown as a 3D cutaway, with scan points in each room</title>
-            <!-- back walls -->
-            <polygon class="wall wall-r" points="0,0 346.4,200 346.4,130 0,-70"/>
-            <polygon class="wall wall-l" points="0,0 -225.2,130 -225.2,60 0,-70"/>
-            <!-- floor plan drawn in plan coordinates, projected isometrically -->
-            <g transform="matrix(0.866 0.5 -0.866 0.5 0 0)">
-              <rect class="floor" x="0" y="0" width="400" height="260"/>
-              <rect class="floor-alt" x="0" y="160" width="120" height="100"/>
-              <rect class="floor-alt" x="220" y="0" width="180" height="110"/>
-              <g class="walls">
-                <path d="M0 0H400V260H200M150 260H0V0"/>
-                <path d="M220 0V40M220 80V110H400"/>
-                <path d="M0 160H120V190M120 225V260"/>
-                <path d="M220 110V170M220 210V260"/>
-              </g>
-              <!-- furniture hints -->
-              <g class="furniture">
-                <rect x="20" y="20" width="110" height="40" rx="6"/>
-                <rect x="60" y="90" width="60" height="36" rx="4"/>
-                <rect x="250" y="130" width="120" height="90" rx="6"/>
-                <rect x="340" y="15" width="45" height="80" rx="3"/>
-                <rect x="15" y="200" width="40" height="45" rx="10"/>
-              </g>
-            </g>
-            <polyline id="scan-path" class="scan-path" points=""/>
-            <g id="scan-points"></g>
-          </svg>
-          <figcaption>Each dot is a spot where the camera captures a room. Together they become one tour you can click through.</figcaption>
-        </figure>
+
+        <div class="hero-tour">
+          <div class="tour-stage" data-model="5hC8AHg7KNF" data-title="102 Hardrock Ln">
+            <img src="https://my.matterport.com/api/v2/player/models/5hC8AHg7KNF/thumb/" alt="Inside 102 Hardrock Ln, a home scanned by Foster 3D Tours" width="3034" height="1707" fetchpriority="high">
+            <button class="tour-play" type="button" aria-label="Open the live 3D tour of 102 Hardrock Ln">
+              <span class="play-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/></svg></span>
+              <span class="play-text"><strong>Try a live tour</strong><span>102 Hardrock Ln</span></span>
+            </button>
+          </div>
+          <p class="tour-note">This is a real tour we scanned. Click in, then drag to look around.</p>
+        </div>
       </div>
     </section>
 
-    <section class="band" id="what">
-      <div class="wrap two-col">
-        <div class="col-head">
-          <h2>What you get for each unit</h2>
-          <p>Everything comes as a link you own. Put it on your listings, your building's website, or text it straight to a prospect.</p>
-        </div>
-        <dl class="deliverables">
-          <div>
-            <dt>3D walkthrough</dt>
-            <dd>A full tour of the unit. Visitors move room to room, look in every direction, and see the space as it really is.</dd>
-          </div>
-          <div>
-            <dt>Floor plan</dt>
-            <dd>A clean plan of the layout, so people can tell where the bed goes before they ever see it.</dd>
-          </div>
-          <div>
-            <dt>Listing photos</dt>
-            <dd>Still images pulled from the scan, ready for listing sites.</dd>
-          </div>
-          <div>
-            <dt>Building common areas</dt>
-            <dd>Lobbies, gyms, roof decks and laundry rooms can be added to the tour so the amenities sell themselves.</dd>
-          </div>
-        </dl>
-      </div>
-    </section>
-
-    <section class="band band-tint" id="how">
+    <!-- WORK -->
+    <section class="section" id="work">
       <div class="wrap">
-        <h2>How it works</h2>
-        <ol class="steps">
+        <div class="section-head">
+          <h2>Recent tours</h2>
+          <p>Homes, hotel suites and lobbies we've scanned. Open any one to walk through it yourself.</p>
+        </div>
+        <ul class="work-grid" id="work-grid"></ul>
+      </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section class="section section-alt" id="services">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>What we scan</h2>
+          <p>Every tour includes a walkthrough, dollhouse view, floor plan view, room labels and measurements.</p>
+        </div>
+        <div class="services">
+          <article class="service">
+            <svg class="service-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>
+            <h3>Real estate listings</h3>
+            <p>Buyers explore every room before they call, so the showings you do book are with serious people.</p>
+            <ul>
+              <li>Integrated floor plans and measurements</li>
+              <li>Tags that highlight key features</li>
+              <li>Custom branding for agents</li>
+            </ul>
+          </article>
+          <article class="service">
+            <svg class="service-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21V5a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v16M15 9h4a1 1 0 0 1 1 1v11M2 21h20M8 8h3M8 12h3M8 16h3"/></svg>
+            <h3>Rental properties</h3>
+            <p>Renters can tour a unit at 11pm from another city. You spend less time on showings that go nowhere.</p>
+            <ul>
+              <li>Pre-screen renters with a virtual walkthrough</li>
+              <li>Record unit condition before and after a lease</li>
+              <li>Open to viewers 24/7</li>
+            </ul>
+          </article>
+          <article class="service">
+            <svg class="service-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18M5 21V8l7-4 7 4v13M9 21v-5h6v5M9 11h.01M15 11h.01"/></svg>
+            <h3>Commercial spaces</h3>
+            <p>Office, retail and hospitality spaces that tenants and guests can picture themselves in.</p>
+            <ul>
+              <li>Show office layouts and shared facilities</li>
+              <li>Help with space planning</li>
+              <li>Hotel rooms, lobbies and event spaces</li>
+            </ul>
+          </article>
+          <article class="service">
+            <svg class="service-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 20h20M4 20V10l8-6 8 6v10M9 20v-6h6v6M12 4v3"/></svg>
+            <h3>Construction</h3>
+            <p>A dated, walkable record of the site at each milestone, for owners and stakeholders who can't be there.</p>
+            <ul>
+              <li>Progress scans at key milestones</li>
+              <li>Remote site visits</li>
+              <li>Before, during and after records</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROCESS -->
+    <section class="section" id="process">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>From booking to tour in about two days</h2>
+        </div>
+        <ol class="process">
           <li>
-            <h3>Book a time</h3>
-            <p>Tell us the address and which units need tours. We find a time that works around your tenants and showings.</p>
+            <h3>Quick consult</h3>
+            <p>Tell us about the property. We'll confirm size, timing and price, usually the same day.</p>
           </li>
           <li>
-            <h3>We scan the space</h3>
-            <p>We bring the camera and move through each room. You don't need to stage anything. Tidy up, turn the lights on, and we handle the rest.</p>
+            <h3>We scan</h3>
+            <p>About 1–2 hours for a 2,000 sq ft home. Tidy up, turn on the lights and open interior doors. That's all the prep.</p>
           </li>
           <li>
-            <h3>You get your tour link</h3>
-            <p>We process the scan and send back a link and an embed code, ready to post wherever you list.</p>
+            <h3>We process</h3>
+            <p>We build the tour, label the rooms and add any tags, floor plans or photos you ordered.</p>
+          </li>
+          <li>
+            <h3>You share it</h3>
+            <p>Within 24–48 hours you get a link and embed code, ready for your listing, website or social posts.</p>
           </li>
         </ol>
       </div>
     </section>
 
-    <section class="band" id="sample">
+    <!-- PRICING -->
+    <section class="section section-alt" id="pricing">
       <div class="wrap">
-        <div class="sample-head">
-          <h2>See a sample tour</h2>
-          <p id="sample-hint" hidden>Click and drag to look around. Use the dots on the floor to move between rooms.</p>
+        <div class="section-head">
+          <h2>Simple pricing</h2>
+          <p>Priced by property size. No hidden fees.</p>
         </div>
-        <div class="tour-frame is-empty" id="tour-frame">
-          <div class="tour-empty">
-            <p>Want to try one before you book? Send us a message and we'll share a live sample tour.</p>
-            <a class="btn btn-primary" href="#contact">Ask for a sample</a>
-          </div>
+        <div class="plans">
+          <article class="plan">
+            <h3>Listings &amp; construction</h3>
+            <p class="plan-sub">One-time scan, ideal for a sale or a project milestone.</p>
+            <p class="price"><span class="amt">$199</span><span class="per">one time</span></p>
+            <ul class="checks">
+              <li>Properties up to 2,000 sq ft</li>
+              <li>Full 3D tour with all standard features</li>
+              <li>1 year of hosting included</li>
+              <li>Larger spaces: $0.10 per extra sq ft</li>
+            </ul>
+            <a class="btn btn-ghost btn-block" href="#quote" data-type="Real estate">Get a quote</a>
+          </article>
+          <article class="plan plan-featured">
+            <p class="plan-flag">Best for landlords &amp; property managers</p>
+            <h3>Rentals &amp; long-term commercial</h3>
+            <p class="plan-sub">Your tour stays live and maintained for as long as you need it.</p>
+            <p class="price"><span class="amt">$49</span><span class="per">per month</span></p>
+            <ul class="checks">
+              <li>Properties up to 2,000 sq ft</li>
+              <li>Full 3D tour with all standard features</li>
+              <li>Ongoing hosting and maintenance</li>
+              <li>Larger spaces: $0.025 per sq ft per month</li>
+            </ul>
+            <a class="btn btn-primary btn-block" href="#quote" data-type="Rental property">Get a quote</a>
+          </article>
+        </div>
+
+        <div class="addons">
+          <h3>Add-ons</h3>
+          <dl>
+            <div><dt>Highlight reel</dt><dd>$50</dd><dd class="addon-desc">A guided video through the best parts of the property</dd></div>
+            <div><dt>Floor plan</dt><dd>$50</dd><dd class="addon-desc">A detailed architectural floor plan</dd></div>
+            <div><dt>Mattertags</dt><dd>$5 / tag</dd><dd class="addon-desc">Notes, photos or links pinned inside the tour</dd></div>
+            <div><dt>2D photos</dt><dd>$5 / image</dd><dd class="addon-desc">Stills pulled from the walkthrough or dollhouse view</dd></div>
+          </dl>
+          <p class="addons-note">Rush delivery and multi-unit pricing are available. <a href="#quote">Ask us for a custom quote.</a></p>
         </div>
       </div>
     </section>
 
-    <section class="band band-tint" id="who">
-      <div class="wrap two-col">
-        <div class="col-head">
-          <h2>Built for New York rentals</h2>
+    <!-- ABOUT -->
+    <section class="section" id="about">
+      <div class="wrap about">
+        <div>
+          <h2>A small team that shows up</h2>
         </div>
-        <div class="who-body">
-          <p>We work with property managers, landlords and leasing agents across the city. Walk-ups, elevator buildings, new developments: if people rent it, we can scan it.</p>
-          <p>Foster 3D Tours is run by three partners based in New York. When you reach out, you talk to the people who will be at your building.</p>
+        <div class="about-body">
+          <p>Foster 3D Tours was founded by Conrad Foster, a finance student who saw how much a good 3D tour helps people decide on a space. What started as a side project grew into a full-service tour company working with real estate agents, landlords, hotels and builders.</p>
+          <p>We shoot every tour on a Matterport Pro2 with professional lighting, and the same people who answer your call are the ones who scan your property.</p>
         </div>
       </div>
     </section>
 
-    <section class="band contact" id="contact">
-      <div class="wrap two-col">
-        <div class="col-head">
-          <h2>Request a scan</h2>
-          <p>Tell us a little about the building and we'll get back to you with timing and a quote.</p>
+    <!-- FAQ -->
+    <section class="section section-alt" id="faq">
+      <div class="wrap faq-wrap">
+        <div class="section-head">
+          <h2>Questions people ask</h2>
+          <p>Something else? <a href="#quote">Send us a message.</a></p>
         </div>
-        <form id="contact-form" class="contact-form" novalidate>
+        <div class="faq">
+          <details>
+            <summary>How long does a scan take?</summary>
+            <p>About 1–2 hours for an average 2,000 sq ft home. Larger homes and commercial spaces take longer, and we'll give you an estimate up front.</p>
+          </details>
+          <details>
+            <summary>How should I prepare the property?</summary>
+            <p>Tidy up, turn on every light, open interior doors and clear walkways. Anything visible will be in the tour.</p>
+          </details>
+          <details>
+            <summary>When will I get my tour?</summary>
+            <p>Most tours are delivered within 24–48 hours of the scan. Rush processing is available for an extra fee.</p>
+          </details>
+          <details>
+            <summary>How do I share it?</summary>
+            <p>You get a link you can send by email or text, post on social media, or embed on your website and listing pages.</p>
+          </details>
+          <details>
+            <summary>How long does the tour stay online?</summary>
+            <p>One-time scans include a year of hosting, and extended hosting is available. Monthly plans stay live as long as you're subscribed.</p>
+          </details>
+          <details>
+            <summary>Where do you work?</summary>
+            <p>Across the New York metro area and Idaho's Wood River Valley. If you're nearby but not sure, ask and we'll let you know.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUOTE -->
+    <section class="section quote" id="quote">
+      <div class="wrap quote-grid">
+        <div class="quote-info">
+          <h2>Get a free quote</h2>
+          <p>Tell us about the property and we'll reply with a price and available times, usually within one business day.</p>
+          <ul class="contact-list">
+            <li><span>Call or text</span><a href="tel:+12087204772">(208) 720-4772</a></li>
+            <li><span>Email</span><a href="mailto:foster3dtours@gmail.com">foster3dtours@gmail.com</a></li>
+            <li><span>Hours</span>Mon–Fri 9am–5pm, Sat 10am–2pm</li>
+            <li><span>Service area</span>New York metro area and the Wood River Valley, Idaho</li>
+          </ul>
+        </div>
+
+        <form class="quote-form" id="quote-form" novalidate>
           <div class="field">
-            <label for="f-name">Your name</label>
-            <input id="f-name" name="name" type="text" autocomplete="name" required>
+            <label for="q-name">Name</label>
+            <input id="q-name" name="name" type="text" autocomplete="name" required>
           </div>
           <div class="field">
-            <label for="f-email">Email</label>
-            <input id="f-email" name="email" type="email" autocomplete="email" required>
+            <label for="q-email">Email</label>
+            <input id="q-email" name="email" type="email" autocomplete="email" required>
           </div>
           <div class="field">
-            <label for="f-address">Building address</label>
-            <input id="f-address" name="address" type="text" autocomplete="street-address">
+            <label for="q-phone">Phone <span class="opt">(optional)</span></label>
+            <input id="q-phone" name="phone" type="tel" autocomplete="tel">
           </div>
           <div class="field">
-            <label for="f-units">How many units?</label>
-            <input id="f-units" name="units" type="text" inputmode="numeric" placeholder="e.g. 4">
+            <label for="q-type">Property type</label>
+            <select id="q-type" name="property_type">
+              <option>Real estate</option>
+              <option>Rental property</option>
+              <option>Commercial property</option>
+              <option>Construction</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="q-size">Approx. size <span class="opt">(sq ft)</span></label>
+            <input id="q-size" name="size" type="text" inputmode="numeric" placeholder="e.g. 1,800">
+          </div>
+          <div class="field">
+            <label for="q-where">Property address or area</label>
+            <input id="q-where" name="location" type="text" autocomplete="street-address">
           </div>
           <div class="field field-wide">
-            <label for="f-msg">Anything else we should know?</label>
-            <textarea id="f-msg" name="message" rows="4"></textarea>
+            <label for="q-msg">Anything else? <span class="opt">(optional)</span></label>
+            <textarea id="q-msg" name="message" rows="3" placeholder="Timing, number of units, add-ons you're interested in"></textarea>
           </div>
+          <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
           <div class="form-foot">
-            <button class="btn btn-primary" type="submit">Send request</button>
+            <button class="btn btn-primary" type="submit">Request my quote</button>
             <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
           </div>
         </form>
@@ -185,10 +332,41 @@
 
   <footer class="site-footer">
     <div class="wrap footer-inner">
-      <span>© <span id="year">2026</span> Foster 3D Tours, New York</span>
-      <a href="#top">Back to top</a>
+      <div>
+        <a class="brand brand-footer" href="#top">
+          <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2.5 28 9.5v13L16 29.5 4 22.5v-13z" fill="currentColor"/><path d="M16 16 28 9.5M16 16v13.5M16 16 4 9.5" stroke="#fff" stroke-width="1.6" fill="none"/></svg>
+          <span>Foster 3D Tours</span>
+        </a>
+        <p>Matterport 3D tours for real estate, rentals, commercial spaces and construction.</p>
+      </div>
+      <div class="footer-links">
+        <a href="tel:+12087204772">(208) 720-4772</a>
+        <a href="mailto:foster3dtours@gmail.com">foster3dtours@gmail.com</a>
+        <a href="https://www.linkedin.com/company/foster-3d-tours/" rel="noopener" target="_blank">LinkedIn</a>
+      </div>
+      <p class="copy">© <span id="year">2026</span> Foster 3D Tours</p>
     </div>
   </footer>
+
+  <!-- Mobile sticky action bar -->
+  <div class="mobile-bar" aria-label="Quick contact">
+    <a class="btn btn-ghost" href="tel:+12087204772">Call</a>
+    <a class="btn btn-primary" href="#quote">Get a free quote</a>
+  </div>
+
+  <!-- Tour viewer -->
+  <dialog class="tour-dialog" id="tour-dialog" aria-labelledby="tour-dialog-title">
+    <div class="tour-dialog-bar">
+      <h2 id="tour-dialog-title">Tour</h2>
+      <div class="tour-dialog-actions">
+        <a class="btn btn-primary btn-sm" href="#quote" id="tour-dialog-cta">Get a tour like this</a>
+        <button class="icon-btn" type="button" id="tour-dialog-close" aria-label="Close tour">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="tour-dialog-frame" id="tour-dialog-frame"></div>
+  </dialog>
 
   <script src="main.js"></script>
 </body>
