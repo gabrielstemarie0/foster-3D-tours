@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Foster 3D Tours — 3D tours for New York apartments</title>
+  <meta name="description" content="Foster 3D Tours scans New York apartment buildings and turns them into 3D tours prospects can walk through on any phone or laptop.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="#top" aria-label="Foster 3D Tours home">
+        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3 28 10v12L16 29 4 22V10z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><circle cx="16" cy="16" r="3.6" fill="var(--scan)"/></svg>
+        <span>Foster 3D Tours</span>
+      </a>
+      <nav aria-label="Main">
+        <a href="#what">What you get</a>
+        <a href="#how">How it works</a>
+        <a href="#contact" class="nav-cta">Request a scan</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top">
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <h1>Let renters walk through the apartment before they visit.</h1>
+          <p class="lede">We scan New York apartment buildings and turn each unit into a 3D tour that opens on any phone or laptop. Prospects look around on their own time, and your showings go to people who already like the place.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#contact">Request a scan</a>
+            <a class="btn btn-quiet" href="#sample">See a sample tour</a>
+          </div>
+        </div>
+        <figure class="hero-figure" aria-label="Illustration: a one-bedroom apartment in 3D, with the points where the camera captures each room">
+          <svg id="dollhouse" viewBox="-250 -90 620 440" role="img" aria-labelledby="dh-title">
+            <title id="dh-title">A one-bedroom apartment shown as a 3D cutaway, with scan points in each room</title>
+            <!-- back walls -->
+            <polygon class="wall wall-r" points="0,0 346.4,200 346.4,130 0,-70"/>
+            <polygon class="wall wall-l" points="0,0 -225.2,130 -225.2,60 0,-70"/>
+            <!-- floor plan drawn in plan coordinates, projected isometrically -->
+            <g transform="matrix(0.866 0.5 -0.866 0.5 0 0)">
+              <rect class="floor" x="0" y="0" width="400" height="260"/>
+              <rect class="floor-alt" x="0" y="160" width="120" height="100"/>
+              <rect class="floor-alt" x="220" y="0" width="180" height="110"/>
+              <g class="walls">
+                <path d="M0 0H400V260H200M150 260H0V0"/>
+                <path d="M220 0V40M220 80V110H400"/>
+                <path d="M0 160H120V190M120 225V260"/>
+                <path d="M220 110V170M220 210V260"/>
+              </g>
+              <!-- furniture hints -->
+              <g class="furniture">
+                <rect x="20" y="20" width="110" height="40" rx="6"/>
+                <rect x="60" y="90" width="60" height="36" rx="4"/>
+                <rect x="250" y="130" width="120" height="90" rx="6"/>
+                <rect x="340" y="15" width="45" height="80" rx="3"/>
+                <rect x="15" y="200" width="40" height="45" rx="10"/>
+              </g>
+            </g>
+            <polyline id="scan-path" class="scan-path" points=""/>
+            <g id="scan-points"></g>
+          </svg>
+          <figcaption>Each dot is a spot where the camera captures a room. Together they become one tour you can click through.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="band" id="what">
+      <div class="wrap two-col">
+        <div class="col-head">
+          <h2>What you get for each unit</h2>
+          <p>Everything comes as a link you own. Put it on your listings, your building's website, or text it straight to a prospect.</p>
+        </div>
+        <dl class="deliverables">
+          <div>
+            <dt>3D walkthrough</dt>
+            <dd>A full tour of the unit. Visitors move room to room, look in every direction, and see the space as it really is.</dd>
+          </div>
+          <div>
+            <dt>Floor plan</dt>
+            <dd>A clean plan of the layout, so people can tell where the bed goes before they ever see it.</dd>
+          </div>
+          <div>
+            <dt>Listing photos</dt>
+            <dd>Still images pulled from the scan, ready for listing sites.</dd>
+          </div>
+          <div>
+            <dt>Building common areas</dt>
+            <dd>Lobbies, gyms, roof decks and laundry rooms can be added to the tour so the amenities sell themselves.</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="band band-tint" id="how">
+      <div class="wrap">
+        <h2>How it works</h2>
+        <ol class="steps">
+          <li>
+            <h3>Book a time</h3>
+            <p>Tell us the address and which units need tours. We find a time that works around your tenants and showings.</p>
+          </li>
+          <li>
+            <h3>We scan the space</h3>
+            <p>We bring the camera and move through each room. You don't need to stage anything. Tidy up, turn the lights on, and we handle the rest.</p>
+          </li>
+          <li>
+            <h3>You get your tour link</h3>
+            <p>We process the scan and send back a link and an embed code, ready to post wherever you list.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="band" id="sample">
+      <div class="wrap">
+        <div class="sample-head">
+          <h2>See a sample tour</h2>
+          <p id="sample-hint" hidden>Click and drag to look around. Use the dots on the floor to move between rooms.</p>
+        </div>
+        <div class="tour-frame is-empty" id="tour-frame">
+          <div class="tour-empty">
+            <p>Want to try one before you book? Send us a message and we'll share a live sample tour.</p>
+            <a class="btn btn-primary" href="#contact">Ask for a sample</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-tint" id="who">
+      <div class="wrap two-col">
+        <div class="col-head">
+          <h2>Built for New York rentals</h2>
+        </div>
+        <div class="who-body">
+          <p>We work with property managers, landlords and leasing agents across the city. Walk-ups, elevator buildings, new developments: if people rent it, we can scan it.</p>
+          <p>Foster 3D Tours is run by three partners based in New York. When you reach out, you talk to the people who will be at your building.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="band contact" id="contact">
+      <div class="wrap two-col">
+        <div class="col-head">
+          <h2>Request a scan</h2>
+          <p>Tell us a little about the building and we'll get back to you with timing and a quote.</p>
+        </div>
+        <form id="contact-form" class="contact-form" novalidate>
+          <div class="field">
+            <label for="f-name">Your name</label>
+            <input id="f-name" name="name" type="text" autocomplete="name" required>
+          </div>
+          <div class="field">
+            <label for="f-email">Email</label>
+            <input id="f-email" name="email" type="email" autocomplete="email" required>
+          </div>
+          <div class="field">
+            <label for="f-address">Building address</label>
+            <input id="f-address" name="address" type="text" autocomplete="street-address">
+          </div>
+          <div class="field">
+            <label for="f-units">How many units?</label>
+            <input id="f-units" name="units" type="text" inputmode="numeric" placeholder="e.g. 4">
+          </div>
+          <div class="field field-wide">
+            <label for="f-msg">Anything else we should know?</label>
+            <textarea id="f-msg" name="message" rows="4"></textarea>
+          </div>
+          <div class="form-foot">
+            <button class="btn btn-primary" type="submit">Send request</button>
+            <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <span>© <span id="year">2026</span> Foster 3D Tours, New York</span>
+      <a href="#top">Back to top</a>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
