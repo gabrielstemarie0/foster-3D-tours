@@ -1,6 +1,7 @@
 # Foster 3D Tours website
 
-Static site (plain HTML/CSS/JS, no build step), hosted on Cloudflare Pages.
+Static site (plain HTML/CSS/JS, no build step), hosted on Cloudflare Pages at https://foster3dtours.com.
+`functions/_middleware.js` sends www and the old pages.dev address to the main domain.
 
 ## Quick edits (top of `main.js`)
 - `WEB3FORMS_KEY`: free key from web3forms.com so quote requests land in foster3dtours@gmail.com. Without it, the form opens the visitor's email app.
