@@ -2,7 +2,7 @@
 // Free form delivery: create an access key at https://web3forms.com using
 // foster3dtours@gmail.com, then paste it here. Until it's set, the form
 // opens the visitor's email app with the request filled in instead.
-const WEB3FORMS_KEY = "";
+const WEB3FORMS_KEY = "b0950a23-f9ad-45f4-a0bd-f7711d5e2c86";
 const CONTACT_EMAIL = "foster3dtours@gmail.com";
 
 // Portfolio: Matterport model IDs (the part after "?m=" in a tour link).
