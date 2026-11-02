@@ -6,6 +6,26 @@ const SECONDS = 25;
 const PER_DAY = 7;
 const LIVE_HALF = 100; // after ~100 live answers on a question, seed data and live data count equally
 const STORE_KEY = "jd:v1";
+const MIN_LIVE = 3; // a player-submitted answer only counts as "known" once 3 people have given it
+
+// ---------- levels ----------
+// Judged against the most popular answer to the question (share / top share).
+const LEVELS = [
+  { id: "johndoe", name: "John Doe", pts: 100, emoji: "🟩", note: "the most popular answers" },
+  { id: "joe", name: "Regular Joe", pts: 75, emoji: "🟨", note: "a common answer" },
+  { id: "neighbor", name: "Neighbor", pts: 50, emoji: "🟧", note: "a less common answer" },
+  { id: "stranger", name: "Stranger", pts: 25, emoji: "🟥", note: "a rare answer" },
+  { id: "alien", name: "Alien", pts: -100, emoji: "👽", note: "nobody else says it" },
+];
+const NOTHING = { id: "nothing", name: "Nothing", pts: 0, emoji: "⬛", note: "no answer" };
+const levelByPts = (p) => [...LEVELS, NOTHING].find((l) => l.pts === p) || NOTHING;
+function levelFor(ratio) {
+  if (ratio >= 0.7) return LEVELS[0];
+  if (ratio >= 0.4) return LEVELS[1];
+  if (ratio > 0.2) return LEVELS[2];
+  if (ratio > 0) return LEVELS[3];
+  return LEVELS[4];
+}
 
 const $ = (id) => document.getElementById(id);
 const views = { intro: $("intro"), play: $("play"), results: $("results") };
@@ -69,7 +89,8 @@ function buildModel(q, live) {
     alias.set(k, k);
     for (const a of aliases) alias.set(normalize(a), k);
   }
-  const liveAnswers = (live && live.answers) || {};
+  const liveAnswers = {};
+  for (const [k, n] of Object.entries((live && live.answers) || {})) if (n >= MIN_LIVE) liveAnswers[k] = n;
   const liveTotal = (live && live.total) || 0;
   const seedTotal = [...seed.values()].reduce((n, v) => n + v.count, 0) || 1;
   const lambda = liveTotal / (liveTotal + LIVE_HALF);
@@ -81,7 +102,7 @@ function buildModel(q, live) {
     share.set(k, (1 - lambda) * s + lambda * l);
   }
   const top = Math.max(...share.values(), 1e-9);
-  const points = (k) => Math.round((100 * (share.get(k) || 0)) / top);
+  const levelOf = (k) => levelFor((share.get(k) || 0) / top);
   const label = (k) => seed.get(k)?.label || k;
   const ranked = [...share.keys()].sort((a, b) => share.get(b) - share.get(a));
 
@@ -105,8 +126,8 @@ function buildModel(q, live) {
   return {
     score(raw) {
       const key = resolve(raw);
-      if (!key) return { key: "", label: "", pts: 0 };
-      return { key, label: label(key), pts: points(key) };
+      if (!key) return { key: "", label: "", pts: NOTHING.pts };
+      return { key, label: label(key), pts: levelOf(key).pts };
     },
     topAnswers: (n) => ranked.slice(0, n).map(label),
   };
@@ -202,14 +223,15 @@ function lockIn(timedOut) {
   $("answer").disabled = true;
   $("answer-form").hidden = true;
   $("running").textContent = `${running} pts`;
-  const tier = r.pts >= 70 ? "t-top" : r.pts >= 30 ? "t-mid" : "t-low";
-  $("fb-pts").textContent = `+${r.pts}`;
-  $("fb-pts").className = `pts ${tier}`;
+  const lvl = levelByPts(r.pts);
+  $("fb-pts").textContent = r.pts > 0 ? `+${r.pts}` : r.pts < 0 ? `\u2212${-r.pts}` : "0";
+  $("fb-pts").className = `pts lvl-${lvl.id}`;
+  $("fb-level").textContent = `${lvl.emoji} ${lvl.name}`;
   $("fb-text").textContent = !raw
     ? "Time's up, nothing entered."
-    : r.pts >= 100 ? `"${r.label}" was the most popular answer!`
-    : r.pts > 0 ? `"${r.label}" scored ${r.pts} out of 100.`
-    : `"${raw}" is too unusual, nobody else says that.`;
+    : r.pts === 100 ? `"${r.label}" is one of the most popular answers!`
+    : r.pts === -100 ? `"${raw}": nobody else says that. Ouch.`
+    : `"${r.label}" is ${lvl.note}.`;
   $("next").textContent = today.answers.length >= PER_DAY ? "See results" : "Next question";
   $("feedback").hidden = false;
   $("next").focus();
@@ -250,7 +272,7 @@ async function submitOnce() {
 }
 
 // ---------- results ----------
-const EMOJI = (p) => (p >= 80 ? "🟩" : p >= 50 ? "🟨" : p >= 20 ? "🟧" : p > 0 ? "🟥" : "⬛");
+const EMOJI = (p) => levelByPts(p).emoji;
 
 function renderResults() {
   show("results");
@@ -260,9 +282,10 @@ function renderResults() {
   $("verdict").textContent =
     total >= 650 ? "Peak John Doe. Perfectly ordinary."
     : total >= 500 ? "Very relatable. You'd blend into any crowd."
-    : total >= 350 ? "Pretty average, which is the goal."
-    : total >= 200 ? "A bit quirky. Maybe too quirky."
-    : "You march to your own drum. Not great for this game.";
+    : total >= 300 ? "Pretty average, which is the goal."
+    : total >= 100 ? "A bit quirky. Maybe too quirky."
+    : total >= 0 ? "You march to your own drum."
+    : "Alien detected. Please blend in.";
   const list = $("breakdown");
   list.replaceChildren();
   today.answers.forEach((a, i) => {
@@ -273,8 +296,8 @@ function renderResults() {
     q.className = "row-q";
     q.textContent = questions[i].prompt;
     const p = document.createElement("span");
-    p.className = "row-pts";
-    p.textContent = `${EMOJI(a.pts)} ${a.pts}`;
+    p.textContent = `${EMOJI(a.pts)} ${levelByPts(a.pts).name} ${a.pts > 0 ? "+" : a.pts < 0 ? "\u2212" : ""}${Math.abs(a.pts)}`;
+    p.className = `row-pts lvl-${levelByPts(a.pts).id}`;
     top.append(q, p);
     const you = document.createElement("div");
     you.className = "row-you";

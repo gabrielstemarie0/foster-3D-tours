@@ -24,12 +24,15 @@
     <section id="intro" class="card" hidden>
       <p class="eyebrow" id="intro-day"></p>
       <h1>Be as average<br>as you can.</h1>
-      <p class="lead">Seven questions. 25 seconds each. Type the answer everyone else is going to type.</p>
-      <ul class="rules">
-        <li><b>100 points</b> for the most popular answer</li>
-        <li>Rarer answers score less, unusual ones score nothing</li>
-        <li>A perfect run is <b>700</b></li>
+      <p class="lead">Seven questions. 25 seconds each. Type the answer everyone else is going to type. Stand out and it will cost you.</p>
+      <ul class="levels" aria-label="Scoring levels">
+        <li class="lvl-johndoe"><span>🟩 John Doe</span><b>+100</b></li>
+        <li class="lvl-joe"><span>🟨 Regular Joe</span><b>+75</b></li>
+        <li class="lvl-neighbor"><span>🟧 Neighbor</span><b>+50</b></li>
+        <li class="lvl-stranger"><span>🟥 Stranger</span><b>+25</b></li>
+        <li class="lvl-alien"><span>👽 Alien <small>(nobody else says it)</small></span><b>&minus;100</b></li>
       </ul>
+      <p class="rules-note">Blank answers score 0. A perfect run is <b>700</b>.</p>
       <button class="btn primary" id="start">Start today's game</button>
     </section>
 
@@ -49,6 +52,7 @@
       <p class="hint" id="answer-hint" role="alert" hidden>That's not an answer. Try again before time runs out.</p>
       <div id="feedback" class="feedback" hidden aria-live="polite">
         <div class="pts" id="fb-pts"></div>
+        <div class="fb-level" id="fb-level"></div>
         <div class="fb-text" id="fb-text"></div>
         <button class="btn" id="next">Next</button>
       </div>

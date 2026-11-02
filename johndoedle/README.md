@@ -29,10 +29,24 @@ Without the D1 binding the game still works, using only the seed answers.
 ## How scoring works
 - Each question has seed answers in `questions.json`: `["answer", weight, ["alias", ...]]`.
 - Finished games send each player's answers to D1, one submission per player per day.
-- Score = blend of seed share and live share. Weight on live data is `n / (n + 100)`, where `n` is the
-  number of live answers to that question, so seeds matter early and real players take over.
-- Top answer = 100, everything else is `100 × share / top share`, unknown answers = 0.
-- Typos are forgiven: 1 edit for words of 4–7 letters, 2 for 8+, none for 3 or fewer.
+- An answer's popularity is a blend of seed share and live share. Weight on live data is `n / (n + 100)`,
+  where `n` is the number of live answers to that question. A live-only answer must have been given by
+  at least 3 players (`MIN_LIVE` in `game.js`) before it counts as known.
+- Each answer is compared with the question's most popular answer and lands in one of five levels:
+
+  | Level | Points | Rule (share / top share) |
+  |---|---|---|
+  | John Doe | +100 | 70% or more |
+  | Regular Joe | +75 | 40% to under 70% |
+  | Neighbor | +50 | over 20% to under 40% |
+  | Stranger | +25 | known, but 20% or less |
+  | Alien | -100 | nobody else says it |
+
+  Nothing entered (timeout) scores 0. A perfect run is 700; the worst is -700.
+- When you add questions, give each seed list at least one answer in each of the first four levels
+  (every current question does) so players can reach every score.
+- Typos are forgiven: 1 edit for words of 4-7 letters, 2 for 8+, none for 3 or fewer.
+- Non-answers (blank, symbols, single or repeated characters) can't be submitted. The field shakes.
 
 ## Daily questions
 Based on the UTC date. Everyone gets the same 7. The bank is shuffled in cycles, so with 35 questions you
