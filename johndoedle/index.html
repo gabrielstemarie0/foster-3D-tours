@@ -23,33 +23,30 @@
     <!-- INTRO -->
     <section id="intro" class="card" hidden>
       <p class="eyebrow" id="intro-day"></p>
-      <h1>Be as average<br>as you can.</h1>
-      <p class="lead">Seven questions. 25 seconds each. Type the answer everyone else is going to type. Stand out and it will cost you.</p>
-      <ul class="levels" aria-label="Scoring levels">
-        <li class="lvl-johndoe"><span>🟩 John Doe</span><b>+100</b></li>
-        <li class="lvl-joe"><span>🟨 Regular Joe</span><b>+75</b></li>
-        <li class="lvl-neighbor"><span>🟧 Neighbor</span><b>+50</b></li>
-        <li class="lvl-stranger"><span>🟥 Stranger</span><b>+25</b></li>
-        <li class="lvl-alien"><span>👽 Alien <small>(nobody else says it)</small></span><b>&minus;100</b></li>
-      </ul>
-      <p class="rules-note">Blank answers score 0. A perfect run is <b>700</b>.</p>
+      <h1>Ask the question<br>nobody else would.</h1>
+      <p class="lead">You get an answer. Write the nichest question that has it, in 40 seconds. Seven cards a day.</p>
+      <ul class="levels" id="levels" aria-label="Scoring levels"></ul>
+      <p class="rules-note">A question that doesn't lead to the answer costs you. A perfect run is <b>700</b>.</p>
       <button class="btn primary" id="start">Start today's game</button>
     </section>
 
     <!-- PLAY -->
     <section id="play" class="card" hidden>
       <div class="meta">
-        <span id="qnum">Question 1 of 7</span>
+        <span id="qnum">Card 1 of 7</span>
         <span id="running">0 pts</span>
       </div>
       <div class="timer" aria-hidden="true"><div class="timer-bar" id="timer-bar"></div></div>
       <div class="timer-text" id="timer-text" aria-live="off">25</div>
-      <h2 id="prompt"></h2>
+      <p class="eyebrow card-eyebrow">The answer is</p>
+      <h2 id="prompt" class="answer-card"></h2>
+      <p class="ask">Write the nichest question this is the answer to.</p>
       <form id="answer-form" autocomplete="off">
-        <input id="answer" type="text" maxlength="40" placeholder="Type your answer" autocapitalize="none" autocorrect="off" spellcheck="false" aria-label="Your answer">
-        <button class="btn primary" type="submit" id="submit">Lock in</button>
+        <input id="answer" type="text" placeholder="Type your question..." maxlength="140" autocapitalize="sentences" autocorrect="on" spellcheck="true" aria-label="Your question">
+        <button class="btn primary" type="submit" id="submit">Ask</button>
       </form>
-      <p class="hint" id="answer-hint" role="alert" hidden>That's not an answer. Try again before time runs out.</p>
+      <p class="hint" id="answer-hint" role="alert" hidden>That's not a question. Try again before time runs out.</p>
+      <p class="judging" id="judging" role="status" hidden>Judging your question...</p>
       <div id="feedback" class="feedback" hidden aria-live="polite">
         <div class="pts" id="fb-pts"></div>
         <div class="fb-level" id="fb-level"></div>

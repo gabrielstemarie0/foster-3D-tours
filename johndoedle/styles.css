@@ -9,11 +9,11 @@
   --good: #2f9e63;
   --warn: #d9822b;
   --bad: #c9473f;
-  --l-johndoe: #2f9e63;
-  --l-joe: #b8a21a;
-  --l-neighbor: #d9822b;
-  --l-stranger: #c9473f;
   --l-alien: #8a4fd6;
+  --l-stranger: #c9473f;
+  --l-neighbor: #d9822b;
+  --l-joe: #b8a21a;
+  --l-imposter: #6b7280;
   --l-nothing: #6b7280;
   --shadow: 0 1px 2px rgba(29, 36, 51, .06), 0 8px 24px rgba(29, 36, 51, .06);
 }
@@ -98,17 +98,17 @@ h2 { margin: 8px 0 20px; font: 700 26px/1.2 Georgia, "Times New Roman", serif; }
 .feedback .pts { font: 700 44px/1 Georgia, serif; }
 .feedback .fb-text { margin: 6px 0 14px; color: var(--muted); }
 .fb-level { margin-top: 4px; font-weight: 700; }
-.lvl-johndoe { color: var(--l-johndoe); }
 .lvl-joe { color: var(--l-joe); }
 .lvl-neighbor { color: var(--l-neighbor); }
 .lvl-stranger { color: var(--l-stranger); }
 .lvl-alien { color: var(--l-alien); }
+.lvl-imposter { color: var(--l-imposter); }
 .lvl-nothing { color: var(--l-nothing); }
 .levels { list-style: none; margin: 0 0 12px; padding: 0; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
-.levels li { display: flex; justify-content: space-between; padding: 9px 14px; border-top: 1px solid var(--line); font-weight: 600; }
+.levels li { display: flex; justify-content: space-between; gap: 16px; align-items: baseline; padding: 9px 14px; border-top: 1px solid var(--line); font-weight: 600; }
 .levels li:first-child { border-top: 0; }
 .levels small { font-weight: 400; color: var(--muted); }
-.levels b { font-variant-numeric: tabular-nums; }
+.levels b { font-variant-numeric: tabular-nums; white-space: nowrap; }
 .rules-note { margin: 0 0 24px; color: var(--muted); }
 .rules-note b { color: var(--ink); }
 
@@ -135,3 +135,10 @@ footer { text-align: center; color: var(--muted); font-size: 13px; padding: 16px
   #answer-form { flex-direction: column; }
 }
 @media (prefers-reduced-motion: reduce) { .timer-bar { transition: none; } .shake { animation: none; } }
+
+.card-eyebrow { margin: 16px 0 0; }
+.answer-card { margin: 4px 0 6px; font-size: 38px; line-height: 1.1; }
+.ask { margin: 0 0 16px; color: var(--muted); }
+.judging { margin: 12px 0 0; text-align: center; color: var(--muted); }
+#answer-form { flex-wrap: wrap; }
+@media (min-width: 421px) { #answer-form input { flex: 1 1 260px; } }

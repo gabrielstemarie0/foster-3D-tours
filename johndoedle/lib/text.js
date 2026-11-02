@@ -1,7 +1,6 @@
-// Shared by the browser (game.js) and the Cloudflare Functions, so both
-// sides agree on what counts as "the same answer".
+// Text helpers shared by the browser and the Cloudflare Function.
 
-export function normalize(input) {
+export function normalize(input, max = 40) {
   let s = String(input ?? "")
     .normalize("NFKD")
     .replace(/[̀-ͯ]/g, "")
@@ -16,35 +15,14 @@ export function normalize(input) {
     .split(" ")
     .map((w) => (w.length > 3 && w.endsWith("s") && !w.endsWith("ss") ? w.slice(0, -1) : w))
     .join(" ");
-  return s.slice(0, 40);
+  return s.slice(0, max);
 }
 
-export function distance(a, b) {
-  if (a === b) return 0;
-  if (Math.abs(a.length - b.length) > 2) return 3;
-  const prev = Array.from({ length: b.length + 1 }, (_, i) => i);
-  for (let i = 1; i <= a.length; i++) {
-    let last = prev[0];
-    prev[0] = i;
-    for (let j = 1; j <= b.length; j++) {
-      const tmp = prev[j];
-      prev[j] = Math.min(prev[j] + 1, prev[j - 1] + 1, last + (a[i - 1] === b[j - 1] ? 0 : 1));
-      last = tmp;
-    }
-  }
-  return prev[b.length];
-}
-
-// How many typos we forgive depends on word length.
-export function allowedTypos(len) {
-  if (len <= 3) return 0;
-  if (len <= 7) return 1;
-  return 2;
-}
-
-// A "non-answer" is blank, symbols only, a single character, or one repeated
-// character ("aaaa"). Unusual-but-real answers are fine; they just score 0.
-export function isValidAnswer(input) {
-  const k = normalize(input).replace(/ /g, "");
-  return k.length >= 2 && !/^(.)\1*$/.test(k);
+// A "non-question" is too short to be a question, symbols only, or one repeated
+// character. Needs at least two words and six letters/digits.
+export function isValidQuestion(input) {
+  const text = String(input ?? "").trim();
+  const words = normalize(text, 200).split(" ").filter(Boolean);
+  const squashed = words.join("");
+  return text.length <= 140 && words.length >= 2 && squashed.length >= 6 && !/^(.)\1*$/.test(squashed);
 }

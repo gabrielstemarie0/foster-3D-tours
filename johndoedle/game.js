@@ -1,42 +1,20 @@
-import { normalize, distance, allowedTypos, isValidAnswer } from "./lib/text.js";
+import cards from "./lib/cards.js";
+import { isValidQuestion } from "./lib/text.js";
+import { LEVELS, NOTHING, levelByPts, judgeLocal } from "./lib/judge.js";
 
 // ---------- settings ----------
 const LAUNCH_DAY = "2026-11-02"; // game #1
-const SECONDS = 25;
+const SECONDS = 40; // typing a question takes longer than a one-word answer
 const PER_DAY = 7;
-const LIVE_HALF = 100; // after ~100 live answers on a question, seed data and live data count equally
-const STORE_KEY = "jd:v1";
-const MIN_LIVE = 3; // a player-submitted answer only counts as "known" once 3 people have given it
-
-// ---------- levels ----------
-// Judged against the most popular answer to the question (share / top share).
-const LEVELS = [
-  { id: "johndoe", name: "John Doe", pts: 100, emoji: "🟩", note: "the most popular answers" },
-  { id: "joe", name: "Regular Joe", pts: 75, emoji: "🟨", note: "a common answer" },
-  { id: "neighbor", name: "Neighbor", pts: 50, emoji: "🟧", note: "a less common answer" },
-  { id: "stranger", name: "Stranger", pts: 25, emoji: "🟥", note: "a rare answer" },
-  { id: "alien", name: "Alien", pts: -100, emoji: "👽", note: "nobody else says it" },
-];
-const NOTHING = { id: "nothing", name: "Nothing", pts: 0, emoji: "⬛", note: "no answer" };
-const levelByPts = (p) => [...LEVELS, NOTHING].find((l) => l.pts === p) || NOTHING;
-function levelFor(ratio) {
-  if (ratio >= 0.7) return LEVELS[0];
-  if (ratio >= 0.4) return LEVELS[1];
-  if (ratio > 0.2) return LEVELS[2];
-  if (ratio > 0) return LEVELS[3];
-  return LEVELS[4];
-}
+const STORE_KEY = "jd:v2";
 
 const $ = (id) => document.getElementById(id);
 const views = { intro: $("intro"), play: $("play"), results: $("results") };
 
-// ---------- date + question selection ----------
-function todayUTC() {
-  return new Date().toISOString().slice(0, 10);
-}
-function dayIndex(day) {
-  return Math.max(0, Math.round((Date.parse(day + "T00:00:00Z") - Date.parse(LAUNCH_DAY + "T00:00:00Z")) / 86400000));
-}
+// ---------- date + card selection ----------
+const todayUTC = () => new Date().toISOString().slice(0, 10);
+const dayIndex = (day) =>
+  Math.max(0, Math.round((Date.parse(day + "T00:00:00Z") - Date.parse(LAUNCH_DAY + "T00:00:00Z")) / 86400000));
 function mulberry32(seed) {
   return () => {
     seed |= 0; seed = (seed + 0x6d2b79f5) | 0;
@@ -45,20 +23,19 @@ function mulberry32(seed) {
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
 }
-// Everyone gets the same 7 for a given date. Each "cycle" walks through the whole
-// bank in a fresh shuffled order, so questions don't repeat until the bank is used up.
-function pickQuestions(bank, day) {
+// Everyone gets the same 7 cards on a given date. Each cycle walks the whole deck in a
+// fresh shuffled order, so cards don't repeat until the deck is used up.
+function pickCards(deck, day) {
   const idx = dayIndex(day);
-  const daysPerCycle = Math.max(1, Math.floor(bank.length / PER_DAY));
-  const cycle = Math.floor(idx / daysPerCycle);
-  const pos = idx % daysPerCycle;
-  const rand = mulberry32(cycle + 1);
-  const order = bank.map((_, i) => i);
+  const daysPerCycle = Math.max(1, Math.floor(deck.length / PER_DAY));
+  const rand = mulberry32(Math.floor(idx / daysPerCycle) + 1);
+  const order = deck.map((_, i) => i);
   for (let i = order.length - 1; i > 0; i--) {
     const j = Math.floor(rand() * (i + 1));
     [order[i], order[j]] = [order[j], order[i]];
   }
-  return order.slice(pos * PER_DAY, pos * PER_DAY + PER_DAY).map((i) => bank[i]);
+  const pos = idx % daysPerCycle;
+  return order.slice(pos * PER_DAY, pos * PER_DAY + PER_DAY).map((i) => deck[i]);
 }
 
 // ---------- saved state ----------
@@ -74,88 +51,34 @@ function loadState() {
   } catch {}
   return { player: uid(), days: {}, streak: { count: 0, best: 0, last: null } };
 }
-let state = loadState();
-function save() {
-  try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch {}
-}
+const state = loadState();
+const save = () => { try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch {} };
 
-// ---------- scoring ----------
-function buildModel(q, live) {
-  const seed = new Map(); // key -> { label, count }
-  const alias = new Map(); // any accepted spelling -> canonical key
-  for (const [label, count, aliases = []] of q.answers) {
-    const k = normalize(label);
-    seed.set(k, { label, count });
-    alias.set(k, k);
-    for (const a of aliases) alias.set(normalize(a), k);
-  }
-  const liveAnswers = {};
-  for (const [k, n] of Object.entries((live && live.answers) || {})) if (n >= MIN_LIVE) liveAnswers[k] = n;
-  const liveTotal = (live && live.total) || 0;
-  const seedTotal = [...seed.values()].reduce((n, v) => n + v.count, 0) || 1;
-  const lambda = liveTotal / (liveTotal + LIVE_HALF);
-
-  const share = new Map();
-  for (const k of new Set([...seed.keys(), ...Object.keys(liveAnswers)])) {
-    const s = (seed.get(k)?.count || 0) / seedTotal;
-    const l = liveTotal ? (liveAnswers[k] || 0) / liveTotal : 0;
-    share.set(k, (1 - lambda) * s + lambda * l);
-  }
-  const top = Math.max(...share.values(), 1e-9);
-  const levelOf = (k) => levelFor((share.get(k) || 0) / top);
-  const label = (k) => seed.get(k)?.label || k;
-  const ranked = [...share.keys()].sort((a, b) => share.get(b) - share.get(a));
-
-  // Typo tolerance: exact/alias match first, then the closest known answer within a few edits.
-  function resolve(raw) {
-    const k = normalize(raw);
-    if (!k) return null;
-    if (alias.has(k)) return alias.get(k);
-    if (k in liveAnswers) return k;
-    const limit = allowedTypos(k.length);
-    let best = null, bestD = limit + 1, bestShare = -1;
-    for (const c of [...alias.keys(), ...Object.keys(liveAnswers)]) {
-      const canon = alias.get(c) ?? c;
-      const d = distance(k, c);
-      const sh = share.get(canon) || 0;
-      if (d < bestD || (d === bestD && sh > bestShare)) { best = canon; bestD = d; bestShare = sh; }
-    }
-    return best !== null && bestD <= limit ? best : k;
-  }
-
-  return {
-    score(raw) {
-      const key = resolve(raw);
-      if (!key) return { key: "", label: "", pts: NOTHING.pts };
-      return { key, label: label(key), pts: levelOf(key).pts };
-    },
-    topAnswers: (n) => ranked.slice(0, n).map(label),
-  };
-}
-
-// ---------- boot ----------
-const bank = await fetch("questions.json").then((r) => r.json());
 const day = todayUTC();
 const gameNo = dayIndex(day) + 1;
-const questions = pickQuestions(bank, day);
-const today = (state.days[day] ||= { answers: [], startedAt: null, submitted: false });
-let stats = {};
-let models = [];
+const today = (state.days[day] ||= { answers: [], startedAt: null });
+const todaysCards = pickCards(cards, day);
 
-async function loadStats() {
+// ---------- judging ----------
+async function judge(card, question) {
   try {
     const ctl = new AbortController();
-    const t = setTimeout(() => ctl.abort(), 4000);
-    const res = await fetch("/api/stats?q=" + questions.map((q) => q.id).join(","), { signal: ctl.signal });
+    const t = setTimeout(() => ctl.abort(), 12000);
+    const res = await fetch("/api/judge", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ player: state.player, day, card: card.id, question }),
+      signal: ctl.signal,
+    });
     clearTimeout(t);
-    if (res.ok) stats = await res.json();
-  } catch {} // offline or no backend yet: fall back to the seed answers
-  models = questions.map((q) => buildModel(q, stats[q.id]));
+    if (res.ok) return await res.json();
+  } catch {} // no backend or it's down: judge offline against the seed questions
+  return judgeLocal(card, question);
 }
 
-function show(name) {
-  for (const [k, el] of Object.entries(views)) el.hidden = k !== name;
-}
+// ---------- UI helpers ----------
+const show = (name) => { for (const [k, el] of Object.entries(views)) el.hidden = k !== name; };
+const fmt = (p) => (p > 0 ? `+${p}` : p < 0 ? `−${-p}` : "0");
 function updateStreak() {
   const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
   const { count, last } = state.streak;
@@ -163,23 +86,24 @@ function updateStreak() {
 }
 
 // ---------- playing ----------
-let tick = null;
-let cur = 0;
-let running = 0;
+let tick = null, cur = 0, running = 0, locked = false;
 
-function showQuestion() {
+function showCard() {
   cur = today.answers.length;
   if (cur >= PER_DAY) return finish();
+  locked = false;
   show("play");
   $("feedback").hidden = true;
+  $("judging").hidden = true;
   $("answer-form").hidden = false;
   $("answer").value = "";
   $("answer").disabled = false;
+  $("submit").disabled = false;
   $("answer").removeAttribute("aria-invalid");
   $("answer-hint").hidden = true;
-  $("qnum").textContent = `Question ${cur + 1} of ${PER_DAY}`;
+  $("qnum").textContent = `Card ${cur + 1} of ${PER_DAY}`;
   $("running").textContent = `${running} pts`;
-  $("prompt").textContent = questions[cur].prompt;
+  $("prompt").textContent = todaysCards[cur].answer;
   if (!today.startedAt) { today.startedAt = Date.now(); save(); }
   $("answer").focus();
   clearInterval(tick);
@@ -193,14 +117,15 @@ function frame() {
   $("timer-text").textContent = secs;
   const bar = $("timer-bar");
   bar.style.transform = `scaleX(${Math.max(0, left) / (SECONDS * 1000)})`;
-  bar.classList.toggle("low", secs <= 10 && secs > 5);
-  bar.classList.toggle("critical", secs <= 5);
-  if (left <= 0) lockIn(true);
+  bar.classList.toggle("low", secs <= 15 && secs > 7);
+  bar.classList.toggle("critical", secs <= 7);
+  if (left <= 0) lockIn();
 }
 
-// Manual submit: non-answers are rejected (shake) and the timer keeps running.
+// Manual submit: a non-question is rejected (shake) and the timer keeps running.
 function trySubmit() {
-  if (isValidAnswer($("answer").value)) return lockIn(false);
+  if (locked) return;
+  if (isValidQuestion($("answer").value)) return lockIn();
   const input = $("answer");
   $("answer-hint").hidden = false;
   input.setAttribute("aria-invalid", "true");
@@ -210,29 +135,41 @@ function trySubmit() {
   input.focus();
 }
 
-function lockIn(timedOut) {
+async function lockIn() {
+  if (locked) return;
+  locked = true;
   clearInterval(tick);
   const typed = $("answer").value.trim();
-  const raw = isValidAnswer(typed) ? typed : ""; // on timeout, a non-answer counts as blank
-  const r = models[cur].score(raw);
-  today.answers.push({ raw, key: r.key, label: r.label, pts: r.pts });
+  const raw = isValidQuestion(typed) ? typed : ""; // on timeout, a non-question counts as blank
+  const card = todaysCards[cur];
+  $("answer").disabled = true;
+  $("submit").disabled = true;
+
+  let result = { pts: NOTHING.pts, matched: false, text: "", top: [] };
+  if (raw) {
+    $("judging").hidden = false;
+    result = await judge(card, raw);
+    $("judging").hidden = true;
+  }
+  today.answers.push({ raw, pts: result.pts, text: result.text, top: result.top || [] });
   today.startedAt = null;
-  running += r.pts;
+  running += result.pts;
   save();
 
-  $("answer").disabled = true;
+  const lvl = levelByPts(result.pts);
   $("answer-form").hidden = true;
   $("running").textContent = `${running} pts`;
-  const lvl = levelByPts(r.pts);
-  $("fb-pts").textContent = r.pts > 0 ? `+${r.pts}` : r.pts < 0 ? `\u2212${-r.pts}` : "0";
+  $("fb-pts").textContent = fmt(result.pts);
   $("fb-pts").className = `pts lvl-${lvl.id}`;
   $("fb-level").textContent = `${lvl.emoji} ${lvl.name}`;
   $("fb-text").textContent = !raw
     ? "Time's up, nothing entered."
-    : r.pts === 100 ? `"${r.label}" is one of the most popular answers!`
-    : r.pts === -100 ? `"${raw}": nobody else says that. Ouch.`
-    : `"${r.label}" is ${lvl.note}.`;
-  $("next").textContent = today.answers.length >= PER_DAY ? "See results" : "Next question";
+    : result.pts < 0
+      ? `That question doesn't lead to "${card.answer}".`
+      : result.matched
+        ? `Same as a known question: "${result.text}"`
+        : "Nobody has asked that one before.";
+  $("next").textContent = today.answers.length >= PER_DAY ? "See results" : "Next card";
   $("feedback").hidden = false;
   $("next").focus();
 }
@@ -251,69 +188,54 @@ function finish() {
     save();
   }
   updateStreak();
-  submitOnce();
   renderResults();
 }
 
-async function submitOnce() {
-  if (today.submitted) return;
-  try {
-    const res = await fetch("/api/submit", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({
-        player: state.player,
-        day,
-        answers: today.answers.map((a, i) => ({ q: questions[i].id, a: a.key })).filter((a) => a.a),
-      }),
-    });
-    if (res.ok) { today.submitted = true; save(); }
-  } catch {} // will retry next visit
-}
-
 // ---------- results ----------
-const EMOJI = (p) => levelByPts(p).emoji;
+const total = () => today.answers.reduce((n, a) => n + a.pts, 0);
 
 function renderResults() {
   show("results");
-  const total = today.answers.reduce((n, a) => n + a.pts, 0);
+  const t = total();
   $("res-day").textContent = `John Doedle #${gameNo}`;
-  $("total").textContent = total;
+  $("total").textContent = t;
   $("verdict").textContent =
-    total >= 650 ? "Peak John Doe. Perfectly ordinary."
-    : total >= 500 ? "Very relatable. You'd blend into any crowd."
-    : total >= 300 ? "Pretty average, which is the goal."
-    : total >= 100 ? "A bit quirky. Maybe too quirky."
-    : total >= 0 ? "You march to your own drum."
-    : "Alien detected. Please blend in.";
+    t >= 550 ? "Wildly niche. Are you even from here?"
+    : t >= 400 ? "Deep cuts all around."
+    : t >= 250 ? "A nicely off-beat mind."
+    : t >= 100 ? "Pretty ordinary questions, which is fair."
+    : t >= 0 ? "Playing it safe."
+    : "Too many imposters. Check your questions.";
   const list = $("breakdown");
   list.replaceChildren();
   today.answers.forEach((a, i) => {
+    const lvl = levelByPts(a.pts);
     const li = document.createElement("li");
     const top = document.createElement("div");
     top.className = "row-top";
     const q = document.createElement("span");
     q.className = "row-q";
-    q.textContent = questions[i].prompt;
+    q.textContent = todaysCards[i].answer;
     const p = document.createElement("span");
-    p.textContent = `${EMOJI(a.pts)} ${levelByPts(a.pts).name} ${a.pts > 0 ? "+" : a.pts < 0 ? "\u2212" : ""}${Math.abs(a.pts)}`;
-    p.className = `row-pts lvl-${levelByPts(a.pts).id}`;
+    p.className = `row-pts lvl-${lvl.id}`;
+    p.textContent = `${lvl.emoji} ${lvl.name} ${fmt(a.pts)}`;
     top.append(q, p);
     const you = document.createElement("div");
     you.className = "row-you";
-    you.textContent = a.raw ? `You said: ${a.raw}` : "No answer";
-    const best = document.createElement("div");
-    best.className = "row-top3";
-    best.textContent = `Top answers: ${models[i].topAnswers(3).join(", ")}`;
-    li.append(top, you, best);
+    you.textContent = a.raw ? `You asked: ${a.raw}` : "No question";
+    li.append(top, you);
+    if (a.top && a.top[0]) {
+      const common = document.createElement("div");
+      common.className = "row-top3";
+      common.textContent = `Most asked: ${a.top[0]}`;
+      li.append(common);
+    }
     list.append(li);
   });
 }
 
-function shareText() {
-  const total = today.answers.reduce((n, a) => n + a.pts, 0);
-  return `John Doedle #${gameNo} ${total}/700\n${today.answers.map((a) => EMOJI(a.pts)).join("")}\n${location.origin}${location.pathname}`;
-}
+const shareText = () =>
+  `John Doedle #${gameNo} ${total()}/700\n${today.answers.map((a) => levelByPts(a.pts).emoji).join("")}\n${location.origin}${location.pathname}`;
 
 async function copyShare() {
   const text = shareText();
@@ -350,27 +272,33 @@ $("answer").addEventListener("input", () => {
   $("answer-hint").hidden = true;
   $("answer").removeAttribute("aria-invalid");
 });
-$("next").addEventListener("click", showQuestion);
-$("start").addEventListener("click", async () => {
-  $("start").disabled = true;
-  await loadStats();
-  showQuestion();
-});
+$("next").addEventListener("click", showCard);
+$("start").addEventListener("click", showCard);
 $("share").addEventListener("click", copyShare);
+
+// intro level list comes from the same table the scoring uses
+$("levels").replaceChildren(
+  ...[...LEVELS, NOTHING].map((l) => {
+    const li = document.createElement("li");
+    li.className = `lvl-${l.id}`;
+    const name = document.createElement("span");
+    name.textContent = `${l.emoji} ${l.name} `;
+    const note = document.createElement("small");
+    note.textContent = `(${l.note})`;
+    name.append(note);
+    const pts = document.createElement("b");
+    pts.textContent = fmt(l.pts);
+    li.append(name, pts);
+    return li;
+  })
+);
 
 updateStreak();
 $("intro-day").textContent = `Game #${gameNo} · ${new Date(day + "T00:00:00Z").toLocaleDateString(undefined, { month: "long", day: "numeric", timeZone: "UTC" })}`;
 setInterval(countdown, 1000);
 countdown();
 
-if (today.done || today.answers.length >= PER_DAY) {
-  await loadStats();
-  running = today.answers.reduce((n, a) => n + a.pts, 0);
-  finish();
-} else if (today.answers.length > 0 || today.startedAt) {
-  await loadStats();
-  running = today.answers.reduce((n, a) => n + a.pts, 0);
-  showQuestion();
-} else {
-  show("intro");
-}
+running = today.answers.reduce((n, a) => n + a.pts, 0);
+if (today.done || today.answers.length >= PER_DAY) finish();
+else if (today.answers.length > 0 || today.startedAt) showCard();
+else show("intro");
