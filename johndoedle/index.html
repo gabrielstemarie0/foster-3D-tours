@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>John Doedle</title>
+  <meta name="description" content="A daily game of 7 questions. Give the most common answer to score the most.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="./" aria-label="John Doedle home">
+      <span class="brand-mark" aria-hidden="true">JD</span>
+      <span class="brand-name">John Doedle</span>
+    </a>
+    <div class="chips">
+      <span class="chip" id="streak-chip" title="Days in a row you've finished">🔥 <b id="streak">0</b></span>
+    </div>
+  </header>
+
+  <main>
+    <!-- INTRO -->
+    <section id="intro" class="card" hidden>
+      <p class="eyebrow" id="intro-day"></p>
+      <h1>Be as average<br>as you can.</h1>
+      <p class="lead">Seven questions. 25 seconds each. Type the answer everyone else is going to type.</p>
+      <ul class="rules">
+        <li><b>100 points</b> for the most popular answer</li>
+        <li>Rarer answers score less, unusual ones score nothing</li>
+        <li>A perfect run is <b>700</b></li>
+      </ul>
+      <button class="btn primary" id="start">Start today's game</button>
+    </section>
+
+    <!-- PLAY -->
+    <section id="play" class="card" hidden>
+      <div class="meta">
+        <span id="qnum">Question 1 of 7</span>
+        <span id="running">0 pts</span>
+      </div>
+      <div class="timer" aria-hidden="true"><div class="timer-bar" id="timer-bar"></div></div>
+      <div class="timer-text" id="timer-text" aria-live="off">25</div>
+      <h2 id="prompt"></h2>
+      <form id="answer-form" autocomplete="off">
+        <input id="answer" type="text" maxlength="40" placeholder="Type your answer" autocapitalize="none" autocorrect="off" spellcheck="false" aria-label="Your answer">
+        <button class="btn primary" type="submit" id="submit">Lock in</button>
+      </form>
+      <div id="feedback" class="feedback" hidden aria-live="polite">
+        <div class="pts" id="fb-pts"></div>
+        <div class="fb-text" id="fb-text"></div>
+        <button class="btn" id="next">Next</button>
+      </div>
+    </section>
+
+    <!-- RESULTS -->
+    <section id="results" class="card" hidden>
+      <p class="eyebrow" id="res-day"></p>
+      <div class="score"><span id="total">0</span><small>/ 700</small></div>
+      <p class="verdict" id="verdict"></p>
+      <ol class="breakdown" id="breakdown"></ol>
+      <div class="actions">
+        <button class="btn primary" id="share">Copy result</button>
+        <span class="copied" id="copied" hidden>Copied!</span>
+      </div>
+      <p class="next-up">Next game in <b id="countdown">--:--:--</b></p>
+    </section>
+
+    <noscript><p class="card">John Doedle needs JavaScript to run.</p></noscript>
+  </main>
+
+  <footer>John Doedle · a new set of questions every day (resets at midnight UTC)</footer>
+  <script type="module" src="game.js"></script>
+</body>
+</html>
