@@ -20,13 +20,15 @@ real player counts; live data takes over as more people play, weight `n / (n + 1
 
 | Level | Points | Rule (share / top share) |
 |---|---|---|
-| 👽 Alien | +100 | under 5%, or a valid question nobody has asked yet |
-| 🟥 Stranger | +75 | 5% to under 20% |
-| 🟧 Neighbor | +50 | 20% to under 50% |
-| 🟨 Regular Joe | +25 | 50% or more, including the top question |
+| 🦐 One in a Krillion | +100 | under 2%, or a valid question nobody has asked yet |
+| 🐙 Deep Cut | +75 | 2% to under 10% |
+| 🐠 Rare | +50 | 10% to under 25% |
+| 🐟 Schooler | +25 | 25% to under 50% |
+| 🦠 Plankton | -100 | 50% or more: the obvious question everyone asks |
 | ❌ Imposter | -100 | the question doesn't lead to the answer |
 | ⬛ Nothing | 0 | timed out with nothing real typed |
 
+The most-asked question is the worst result, and it gets better the rarer you go. Tier names and order follow Krillion.
 A perfect run is 700. Blank, symbol-only and one-word input can't be submitted; the field shakes and the
 timer keeps running.
 
@@ -34,7 +36,7 @@ timer keeps running.
 1. The question is embedded with Workers AI (`@cf/baai/bge-base-en-v1.5`) and compared with the card's known
    questions. If it is close to one, it is treated as the same question and scored by that question's rarity.
 2. If it is not close to a seed question, a small model (`@cf/meta/llama-3.1-8b-instruct`) is asked whether
-   the answer is a correct response. NO means Imposter; YES means a new question, so +100.
+   the answer is a correct response. NO means Imposter; YES means a new question, so One in a Krillion.
 3. Valid questions are counted once per player per card per day (`plays` table).
 
 The similarity thresholds in `lib/judge.js` (`DENSE`) are starting points; adjust them after you've seen real
@@ -58,8 +60,8 @@ will mark many genuinely new questions as Imposter.
 ## Daily cards
 Based on the UTC date. Everyone gets the same 7. The deck is shuffled in cycles, so 35 cards give 5 days with
 no repeats. To add a card, append to `lib/cards.js` with the next id (`a36`, ...): the answer plus about five
-questions with weights, from the obvious one (100) down to deep cuts (5-10). Give each card at least one
-question in the Regular Joe, Neighbor and Stranger bands so every score is reachable. Game #1 is
+questions using the weight ladder 100, 55, 30, 14, 6 (obvious down to deep cut), so every card has a question in
+each scoring band. Game #1 is
 `LAUNCH_DAY` in `game.js`.
 
 ## Known limits

@@ -1,6 +1,6 @@
 import cards from "./lib/cards.js";
 import { isValidQuestion } from "./lib/text.js";
-import { LEVELS, NOTHING, levelByPts, judgeLocal } from "./lib/judge.js";
+import { LEVELS, IMPOSTER, NOTHING, levelById, judgeLocal } from "./lib/judge.js";
 
 // ---------- settings ----------
 const LAUNCH_DAY = "2026-11-02"; // game #1
@@ -145,18 +145,18 @@ async function lockIn() {
   $("answer").disabled = true;
   $("submit").disabled = true;
 
-  let result = { pts: NOTHING.pts, matched: false, text: "", top: [] };
+  let result = { level: NOTHING.id, pts: NOTHING.pts, matched: false, text: "", top: [] };
   if (raw) {
     $("judging").hidden = false;
     result = await judge(card, raw);
     $("judging").hidden = true;
   }
-  today.answers.push({ raw, pts: result.pts, text: result.text, top: result.top || [] });
+  today.answers.push({ raw, level: result.level, pts: result.pts, text: result.text, top: result.top || [] });
   today.startedAt = null;
   running += result.pts;
   save();
 
-  const lvl = levelByPts(result.pts);
+  const lvl = levelById(result.level);
   $("answer-form").hidden = true;
   $("running").textContent = `${running} pts`;
   $("fb-pts").textContent = fmt(result.pts);
@@ -164,7 +164,7 @@ async function lockIn() {
   $("fb-level").textContent = `${lvl.emoji} ${lvl.name}`;
   $("fb-text").textContent = !raw
     ? "Time's up, nothing entered."
-    : result.pts < 0
+    : result.level === "imposter"
       ? `That question doesn't lead to "${card.answer}".`
       : result.matched
         ? `Same as a known question: "${result.text}"`
@@ -200,16 +200,16 @@ function renderResults() {
   $("res-day").textContent = `John Doedle #${gameNo}`;
   $("total").textContent = t;
   $("verdict").textContent =
-    t >= 550 ? "Wildly niche. Are you even from here?"
+    t >= 550 ? "Absolutely one in a krillion."
     : t >= 400 ? "Deep cuts all around."
     : t >= 250 ? "A nicely off-beat mind."
-    : t >= 100 ? "Pretty ordinary questions, which is fair."
+    : t >= 100 ? "Getting there. Go deeper."
     : t >= 0 ? "Playing it safe."
-    : "Too many imposters. Check your questions.";
+    : "Too much plankton. Think smaller.";
   const list = $("breakdown");
   list.replaceChildren();
   today.answers.forEach((a, i) => {
-    const lvl = levelByPts(a.pts);
+    const lvl = levelById(a.level);
     const li = document.createElement("li");
     const top = document.createElement("div");
     top.className = "row-top";
@@ -235,7 +235,7 @@ function renderResults() {
 }
 
 const shareText = () =>
-  `John Doedle #${gameNo} ${total()}/700\n${today.answers.map((a) => levelByPts(a.pts).emoji).join("")}\n${location.origin}${location.pathname}`;
+  `John Doedle #${gameNo} ${total()}/700\n${today.answers.map((a) => levelById(a.level).emoji).join("")}\n${location.origin}${location.pathname}`;
 
 async function copyShare() {
   const text = shareText();
@@ -278,7 +278,7 @@ $("share").addEventListener("click", copyShare);
 
 // intro level list comes from the same table the scoring uses
 $("levels").replaceChildren(
-  ...[...LEVELS, NOTHING].map((l) => {
+  ...[...LEVELS, IMPOSTER, NOTHING].map((l) => {
     const li = document.createElement("li");
     li.className = `lvl-${l.id}`;
     const name = document.createElement("span");

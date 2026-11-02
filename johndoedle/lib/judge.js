@@ -2,22 +2,26 @@
 // and by the browser as an offline fallback (word-overlap only, seed questions only).
 import { normalize } from "./text.js";
 
-// ---------- levels ----------
-// Rarer question = more points. Judged against the most-asked question for the answer.
+// ---------- levels (Krillion style) ----------
+// The rarer the question, the more points: the most-asked question is the worst result.
+// Judged against the most-asked question for the answer.
 export const LEVELS = [
-  { id: "alien", name: "Alien", pts: 100, emoji: "👽", note: "almost nobody asks that" },
-  { id: "stranger", name: "Stranger", pts: 75, emoji: "🟥", note: "a rare question" },
-  { id: "neighbor", name: "Neighbor", pts: 50, emoji: "🟧", note: "a less common question" },
-  { id: "joe", name: "Regular Joe", pts: 25, emoji: "🟨", note: "a common question" },
-  { id: "imposter", name: "Imposter", pts: -100, emoji: "❌", note: "that question doesn't lead to this answer" },
+  { id: "krillion", name: "One in a Krillion", pts: 100, emoji: "🦐", note: "almost nobody asks that" },
+  { id: "deepcut", name: "Deep Cut", pts: 75, emoji: "🐙", note: "a deep cut" },
+  { id: "rare", name: "Rare", pts: 50, emoji: "🐠", note: "a rare question" },
+  { id: "schooler", name: "Schooler", pts: 25, emoji: "🐟", note: "a fairly common question" },
+  { id: "plankton", name: "Plankton", pts: -100, emoji: "🦠", note: "everyone asks that one" },
 ];
+// A question that doesn't lead to the answer is as bad as the most common one.
+export const IMPOSTER = { id: "imposter", name: "Imposter", pts: -100, emoji: "❌", note: "that question doesn't lead to this answer" };
 export const NOTHING = { id: "nothing", name: "Nothing", pts: 0, emoji: "⬛", note: "no question entered" };
-export const levelByPts = (p) => [...LEVELS, NOTHING].find((l) => l.pts === p) || NOTHING;
+export const levelById = (id) => [...LEVELS, IMPOSTER, NOTHING].find((l) => l.id === id) || NOTHING;
 
 export function levelForRatio(r) {
-  if (r >= 0.5) return LEVELS[3];
-  if (r >= 0.2) return LEVELS[2];
-  if (r >= 0.05) return LEVELS[1];
+  if (r >= 0.5) return LEVELS[4];
+  if (r >= 0.25) return LEVELS[3];
+  if (r >= 0.1) return LEVELS[2];
+  if (r >= 0.02) return LEVELS[1];
   return LEVELS[0];
 }
 
@@ -79,10 +83,10 @@ export async function decide(rows, vec, th, aiValid) {
   const valid = seedBest >= th.validNear || (await aiValid?.()) === true;
   const { share, top } = computeShares(rows);
   const topTexts = [...rows].sort((a, b) => share.get(b.key) - share.get(a.key)).slice(0, 3).map((r) => r.text);
-  if (!valid) return { valid: false, pts: -100, matched: null, topTexts };
+  if (!valid) return { valid: false, level: IMPOSTER, matched: null, topTexts };
   const matched = bestSim >= th.same ? best : null;
   const ratio = matched ? (share.get(matched.key) || 0) / top : 0;
-  return { valid: true, pts: levelForRatio(ratio).pts, matched, topTexts };
+  return { valid: true, level: levelForRatio(ratio), matched, topTexts };
 }
 
 // ---------- offline fallback (browser) ----------
@@ -91,5 +95,5 @@ export function seedRows(card) {
 }
 export async function judgeLocal(card, question) {
   const d = await decide(seedRows(card), lexVec(question), LEXICAL, null);
-  return { valid: d.valid, pts: d.pts, matched: !!d.matched, text: d.matched ? d.matched.text : question, top: d.topTexts };
+  return { valid: d.valid, level: d.level.id, pts: d.level.pts, matched: !!d.matched, text: d.matched ? d.matched.text : question, top: d.topTexts };
 }

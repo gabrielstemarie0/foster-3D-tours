@@ -1,5 +1,6 @@
 // The daily deck. Each card is an answer plus the questions people might write for it,
 // weighted by how commonly they're asked: [question, weight].
+// Every card uses the same ladder (100, 55, 30, 14, 6) so each scoring band is reachable.
 export default [
  {
   "id": "a01",
@@ -15,11 +16,11 @@ export default [
    ],
    [
     "What spicy cured sausage is sliced into rounds for pizza?",
-    28
+    30
    ],
    [
     "What Italian-American salami is named after the Italian word for a large pepper?",
-    12
+    14
    ],
    [
     "Which pizza topping curls up into little cups when baked?",
@@ -45,7 +46,7 @@ export default [
    ],
    [
     "What mountain is called Chomolungma in Tibetan?",
-    12
+    14
    ],
    [
     "What mountain is named after a British surveyor general of India?",
@@ -67,11 +68,11 @@ export default [
    ],
    [
     "Who wrote Hamlet and Macbeth?",
-    35
+    30
    ],
    [
     "Which poet from Stratford-upon-Avon is nicknamed the Bard?",
-    12
+    14
    ],
    [
     "Whose company of actors performed at the Globe Theatre?",
@@ -89,7 +90,7 @@ export default [
    ],
    [
     "Which city has the Eiffel Tower?",
-    60
+    55
    ],
    [
     "Which city is nicknamed the City of Light?",
@@ -101,7 +102,7 @@ export default [
    ],
    [
     "Which European capital hosted the 1900 and 1924 Summer Olympics?",
-    5
+    6
    ]
   ]
  },
@@ -119,11 +120,11 @@ export default [
    ],
    [
     "Which animal is bigger than any dinosaur known?",
-    20
+    30
    ],
    [
     "Which animal is Balaenoptera musculus?",
-    10
+    14
    ],
    [
     "Which baleen whale feeds almost entirely on krill?",
@@ -141,19 +142,19 @@ export default [
    ],
    [
     "Who painted The Last Supper?",
-    50
+    55
    ],
    [
     "Who drew the Vitruvian Man?",
-    35
+    30
    ],
    [
     "Which Renaissance polymath designed flying machines in his notebooks?",
-    20
+    14
    ],
    [
     "Who wrote his notes in mirror writing?",
-    8
+    6
    ]
   ]
  },
@@ -167,15 +168,15 @@ export default [
    ],
    [
     "What element has the chemical symbol O?",
-    60
+    55
    ],
    [
     "What gas makes up about 21 percent of the atmosphere?",
-    35
+    30
    ],
    [
     "What is the most abundant element in Earth's crust?",
-    20
+    14
    ],
    [
     "What element did Joseph Priestley and Carl Scheele both discover?",
@@ -193,7 +194,7 @@ export default [
    ],
    [
     "What ship was called unsinkable?",
-    50
+    55
    ],
    [
     "Which White Star Line liner sank on its maiden voyage?",
@@ -201,11 +202,11 @@ export default [
    ],
    [
     "Which ship did the Carpathia rescue survivors from?",
-    12
+    14
    ],
    [
     "Which ship was Harland and Wolff's yard number 401?",
-    5
+    6
    ]
   ]
  },
@@ -219,15 +220,15 @@ export default [
    ],
    [
     "Which planet has the volcano Olympus Mons?",
-    50
+    55
    ],
    [
     "Which planet do rovers like Curiosity explore?",
-    35
+    30
    ],
    [
     "Which planet has moons named Phobos and Deimos?",
-    15
+    14
    ],
    [
     "On which planet is a day called a sol?",
@@ -245,15 +246,15 @@ export default [
    ],
    [
     "Who is the most famous physicist of the 20th century?",
-    50
+    55
    ],
    [
     "Who wrote the equation E=mc2?",
-    35
+    30
    ],
    [
     "Who won the 1921 Nobel Prize in Physics for the photoelectric effect?",
-    12
+    14
    ],
    [
     "Which physicist worked in the Swiss patent office in Bern?",
@@ -271,7 +272,7 @@ export default [
    ],
    [
     "Which river flows through Egypt?",
-    60
+    55
    ],
    [
     "Which river's annual flood fed ancient Egyptian farming?",
@@ -279,11 +280,11 @@ export default [
    ],
    [
     "Which river flows north into the Mediterranean?",
-    20
+    14
    ],
    [
     "Which river has White and Blue branches that meet at Khartoum?",
-    8
+    6
    ]
   ]
  },
@@ -297,19 +298,19 @@ export default [
    ],
    [
     "Which city has the Shibuya Crossing?",
-    50
+    55
    ],
    [
     "What is the most populous metropolitan area in the world?",
-    35
-   ],
-   [
-    "Which city was formerly called Edo?",
-    15
+    30
    ],
    [
     "Which city hosted the Summer Olympics in 1964?",
-    25
+    14
+   ],
+   [
+    "Which city was formerly called Edo?",
+    6
    ]
   ]
  },
@@ -326,16 +327,16 @@ export default [
     55
    ],
    [
+    "Which food is made in a honeycomb?",
+    30
+   ],
+   [
     "Which natural sweetener practically never spoils?",
-    25
+    14
    ],
    [
     "Which food is made by bees regurgitating nectar in the hive?",
-    8
-   ],
-   [
-    "Which food is made in a honeycomb?",
-    35
+    6
    ]
   ]
  },
@@ -353,15 +354,15 @@ export default [
    ],
    [
     "Which bird is the emperor the largest species of?",
-    25
+    30
    ],
    [
     "Which birds' males incubate eggs on their feet?",
-    12
+    14
    ],
    [
     "Which bird family is called Spheniscidae?",
-    5
+    6
    ]
   ]
  },
@@ -375,19 +376,19 @@ export default [
    ],
    [
     "In what sport is the FIFA World Cup played?",
-    60
+    55
    ],
    [
     "What sport has a goalkeeper and penalty shootouts?",
-    25
+    30
    ],
    [
     "What sport awards the Ballon d'Or?",
-    12
+    14
    ],
    [
     "What sport's rules are set by the Laws of the Game?",
-    5
+    6
    ]
   ]
  },
@@ -409,7 +410,7 @@ export default [
    ],
    [
     "What drink comes from the Coffea plant?",
-    12
+    14
    ],
    [
     "What drink did the legend of the goatherd Kaldi discover?",
@@ -427,19 +428,19 @@ export default [
    ],
    [
     "What orbits the Earth about every 27 days?",
-    50
+    55
    ],
    [
     "What did the Apollo astronauts land on?",
-    40
+    30
    ],
    [
     "What causes tides on Earth?",
-    15
+    14
    ],
    [
     "What body has dark plains called maria?",
-    8
+    6
    ]
   ]
  },
@@ -457,15 +458,15 @@ export default [
    ],
    [
     "What ocean contains the Mariana Trench?",
-    35
+    30
    ],
    [
     "What ocean is surrounded by the Ring of Fire?",
-    15
+    14
    ],
    [
     "What ocean did Magellan name for its calm waters?",
-    8
+    6
    ]
   ]
  },
@@ -479,19 +480,19 @@ export default [
    ],
    [
     "What element has the symbol Au?",
-    60
+    55
    ],
    [
     "What metal drove the California Rush of 1849?",
-    35
+    30
    ],
    [
     "What element has atomic number 79?",
-    15
+    14
    ],
    [
     "What metal is measured in karats?",
-    10
+    6
    ]
   ]
  },
@@ -505,19 +506,19 @@ export default [
    ],
    [
     "What animal has a trunk and tusks?",
-    60
+    55
    ],
    [
     "Which animal is Dumbo?",
-    35
+    30
    ],
    [
     "Which animal is the symbol of the US Republican Party?",
-    20
+    14
    ],
    [
     "Which land mammal has the longest pregnancy?",
-    12
+    6
    ]
   ]
  },
@@ -531,15 +532,15 @@ export default [
    ],
    [
     "What did Leonardo da Vinci paint that is famous for its smile?",
-    50
+    55
    ],
    [
     "What painting was stolen from the Louvre in 1911?",
-    25
+    30
    ],
    [
     "What portrait is also called La Gioconda?",
-    12
+    14
    ],
    [
     "What painting depicts Lisa Gherardini?",
@@ -557,19 +558,19 @@ export default [
    ],
    [
     "What desert covers much of North Africa?",
-    60
+    55
    ],
    [
     "What desert is about the size of the United States?",
-    20
+    30
    ],
    [
     "What desert's name comes from the Arabic word for desert?",
-    12
+    14
    ],
    [
     "What desert includes the Eye of the Sahara, the Richat Structure?",
-    5
+    6
    ]
   ]
  },
@@ -587,11 +588,11 @@ export default [
    ],
    [
     "Who composed Fur Elise?",
-    40
+    30
    ],
    [
     "Who composed the Moonlight Sonata?",
-    25
+    14
    ],
    [
     "Who wrote only one opera, called Fidelio?",
@@ -609,19 +610,19 @@ export default [
    ],
    [
     "What monument stands on the Giza plateau near Cairo?",
-    60
+    55
    ],
    [
     "What tomb was built for the pharaoh Khufu?",
-    50
+    30
    ],
    [
     "What was the tallest man-made structure for about 3,800 years?",
-    25
+    14
    ],
    [
     "What structure was originally covered in white limestone casing?",
-    8
+    6
    ]
   ]
  },
@@ -635,19 +636,19 @@ export default [
    ],
    [
     "What planet is called Earth's twin?",
-    50
+    55
    ],
    [
     "Which planet is the brightest object in the night sky after the Moon?",
-    40
-   ],
-   [
-    "Which planet spins backwards compared to most others?",
     30
    ],
    [
+    "Which planet spins backwards compared to most others?",
+    14
+   ],
+   [
     "Which planet has a day longer than its year?",
-    12
+    6
    ]
   ]
  },
@@ -669,7 +670,7 @@ export default [
    ],
    [
     "What game has the special move castling?",
-    15
+    14
    ],
    [
     "What game's world champions are crowned by FIDE?",
@@ -695,11 +696,11 @@ export default [
    ],
    [
     "What is April's birthstone?",
-    20
+    14
    ],
    [
     "What gem is graded by the four Cs?",
-    12
+    6
    ]
   ]
  },
@@ -713,15 +714,15 @@ export default [
    ],
    [
     "What river flows through the Amazon rainforest?",
-    60
+    55
    ],
    [
     "What river is home to pink river dolphins?",
-    20
+    30
    ],
    [
     "What South American river empties into the Atlantic near Belem?",
-    12
+    14
    ],
    [
     "What river did Orellana name after a legend of female warriors?",
@@ -747,11 +748,11 @@ export default [
    ],
    [
     "Which hero was created by Stan Lee and Steve Ditko?",
-    15
+    14
    ],
    [
     "Who is Aunt May's nephew?",
-    8
+    6
    ]
   ]
  },
@@ -769,15 +770,15 @@ export default [
    ],
    [
     "What country is home to the Sydney Opera House?",
-    40
+    30
    ],
    [
     "What country has Uluru?",
-    20
+    14
    ],
    [
     "What country's capital is Canberra?",
-    12
+    6
    ]
   ]
  },
@@ -795,15 +796,15 @@ export default [
    ],
    [
     "What fruit was once called a love apple?",
-    20
+    30
    ],
    [
     "What fruit did the US Supreme Court declare a vegetable in 1893?",
-    12
+    14
    ],
    [
     "What fruit is Solanum lycopersicum?",
-    10
+    6
    ]
   ]
  },
@@ -821,15 +822,15 @@ export default [
    ],
    [
     "Who composed Eine kleine Nachtmusik?",
-    40
+    30
    ],
    [
     "Who composed Don Giovanni?",
-    20
+    14
    ],
    [
     "Who left his Requiem unfinished when he died?",
-    15
+    6
    ]
   ]
  },
@@ -843,7 +844,7 @@ export default [
    ],
    [
     "What spotted cat has tear marks on its face?",
-    35
+    55
    ],
    [
     "What big cat purrs but cannot roar?",
@@ -851,11 +852,11 @@ export default [
    ],
    [
     "What animal can accelerate from 0 to 60 mph in about three seconds?",
-    20
+    14
    ],
    [
     "Which cat has semi-retractable claws?",
-    10
+    6
    ]
   ]
  },
@@ -873,15 +874,15 @@ export default [
    ],
    [
     "Who commanded Apollo 11?",
-    40
+    30
    ],
    [
     "Which astronaut was born in Wapakoneta, Ohio?",
-    12
+    14
    ],
    [
     "Who flew Gemini 8 and docked in orbit in 1966?",
-    8
+    6
    ]
   ]
  },
@@ -899,15 +900,15 @@ export default [
    ],
    [
     "What planet has the moon Titan?",
-    35
+    30
    ],
    [
     "Which planet is less dense than water?",
-    25
+    14
    ],
    [
     "Which planet did the Cassini spacecraft orbit?",
-    12
+    6
    ]
   ]
  }
