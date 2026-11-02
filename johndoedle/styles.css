@@ -79,6 +79,15 @@ h2 { margin: 8px 0 20px; font: 700 26px/1.2 Georgia, "Times New Roman", serif; }
 }
 #answer-form input:focus { border-color: var(--accent); outline: none; }
 
+.hint { margin: 8px 0 0; color: var(--bad); font-size: 14px; }
+#answer-form input[aria-invalid="true"] { border-color: var(--bad); }
+.shake { animation: shake .4s; }
+@keyframes shake {
+  10%, 90% { transform: translateX(-2px); }
+  20%, 80% { transform: translateX(4px); }
+  30%, 50%, 70% { transform: translateX(-7px); }
+  40%, 60% { transform: translateX(7px); }
+}
 .feedback { margin-top: 20px; padding: 16px; border-radius: 14px; background: var(--bg); border: 1px solid var(--line); text-align: center; }
 .feedback .pts { font: 700 44px/1 Georgia, serif; }
 .feedback .fb-text { margin: 6px 0 14px; color: var(--muted); }
@@ -108,4 +117,4 @@ footer { text-align: center; color: var(--muted); font-size: 13px; padding: 16px
   h1 { font-size: 34px; }
   #answer-form { flex-direction: column; }
 }
-@media (prefers-reduced-motion: reduce) { .timer-bar { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .timer-bar { transition: none; } .shake { animation: none; } }

@@ -41,3 +41,10 @@ export function allowedTypos(len) {
   if (len <= 7) return 1;
   return 2;
 }
+
+// A "non-answer" is blank, symbols only, a single character, or one repeated
+// character ("aaaa"). Unusual-but-real answers are fine; they just score 0.
+export function isValidAnswer(input) {
+  const k = normalize(input).replace(/ /g, "");
+  return k.length >= 2 && !/^(.)\1*$/.test(k);
+}

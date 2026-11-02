@@ -1,4 +1,4 @@
-import { normalize, distance, allowedTypos } from "./lib/text.js";
+import { normalize, distance, allowedTypos, isValidAnswer } from "./lib/text.js";
 
 // ---------- settings ----------
 const LAUNCH_DAY = "2026-11-02"; // game #1
@@ -154,6 +154,8 @@ function showQuestion() {
   $("answer-form").hidden = false;
   $("answer").value = "";
   $("answer").disabled = false;
+  $("answer").removeAttribute("aria-invalid");
+  $("answer-hint").hidden = true;
   $("qnum").textContent = `Question ${cur + 1} of ${PER_DAY}`;
   $("running").textContent = `${running} pts`;
   $("prompt").textContent = questions[cur].prompt;
@@ -172,12 +174,25 @@ function frame() {
   bar.style.transform = `scaleX(${Math.max(0, left) / (SECONDS * 1000)})`;
   bar.classList.toggle("low", secs <= 10 && secs > 5);
   bar.classList.toggle("critical", secs <= 5);
-  if (left <= 0) lockIn();
+  if (left <= 0) lockIn(true);
 }
 
-function lockIn() {
+// Manual submit: non-answers are rejected (shake) and the timer keeps running.
+function trySubmit() {
+  if (isValidAnswer($("answer").value)) return lockIn(false);
+  const input = $("answer");
+  $("answer-hint").hidden = false;
+  input.setAttribute("aria-invalid", "true");
+  input.classList.remove("shake");
+  void input.offsetWidth; // restart the animation
+  input.classList.add("shake");
+  input.focus();
+}
+
+function lockIn(timedOut) {
   clearInterval(tick);
-  const raw = $("answer").value.trim();
+  const typed = $("answer").value.trim();
+  const raw = isValidAnswer(typed) ? typed : ""; // on timeout, a non-answer counts as blank
   const r = models[cur].score(raw);
   today.answers.push({ raw, key: r.key, label: r.label, pts: r.pts });
   today.startedAt = null;
@@ -307,7 +322,11 @@ function countdown() {
 }
 
 // ---------- wire up ----------
-$("answer-form").addEventListener("submit", (e) => { e.preventDefault(); lockIn(); });
+$("answer-form").addEventListener("submit", (e) => { e.preventDefault(); trySubmit(); });
+$("answer").addEventListener("input", () => {
+  $("answer-hint").hidden = true;
+  $("answer").removeAttribute("aria-invalid");
+});
 $("next").addEventListener("click", showQuestion);
 $("start").addEventListener("click", async () => {
   $("start").disabled = true;
