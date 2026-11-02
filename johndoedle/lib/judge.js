@@ -3,17 +3,17 @@
 import { normalize } from "./text.js";
 
 // ---------- levels (Krillion style) ----------
-// The rarer the question, the more points: the most-asked question is the worst result.
+// Same tiers and points as Krillion: the rarer the question, the more points.
 // Judged against the most-asked question for the answer.
 export const LEVELS = [
   { id: "krillion", name: "One in a Krillion", pts: 100, emoji: "🦐", note: "almost nobody asks that" },
-  { id: "deepcut", name: "Deep Cut", pts: 75, emoji: "🐙", note: "a deep cut" },
-  { id: "rare", name: "Rare", pts: 50, emoji: "🐠", note: "a rare question" },
-  { id: "schooler", name: "Schooler", pts: 25, emoji: "🐟", note: "a fairly common question" },
-  { id: "plankton", name: "Plankton", pts: -100, emoji: "🦠", note: "everyone asks that one" },
+  { id: "deepcut", name: "Deep Cut", pts: 85, emoji: "🐙", note: "a deep cut" },
+  { id: "rare", name: "Rare", pts: 60, emoji: "🐠", note: "a rare question" },
+  { id: "schooler", name: "Schooler", pts: 30, emoji: "🐟", note: "a fairly common question" },
+  { id: "plankton", name: "Plankton", pts: 10, emoji: "🦠", note: "everyone asks that one" },
 ];
-// A question that doesn't lead to the answer is as bad as the most common one.
-export const IMPOSTER = { id: "imposter", name: "Imposter", pts: -100, emoji: "❌", note: "that question doesn't lead to this answer" };
+// Like Krillion, an answer the game doesn't accept scores nothing.
+export const IMPOSTER = { id: "imposter", name: "Imposter", pts: 0, emoji: "❌", note: "that question doesn't lead to this answer" };
 export const NOTHING = { id: "nothing", name: "Nothing", pts: 0, emoji: "⬛", note: "no question entered" };
 export const levelById = (id) => [...LEVELS, IMPOSTER, NOTHING].find((l) => l.id === id) || NOTHING;
 

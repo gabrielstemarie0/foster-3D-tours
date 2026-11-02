@@ -20,17 +20,17 @@ real player counts; live data takes over as more people play, weight `n / (n + 1
 
 | Level | Points | Rule (share / top share) |
 |---|---|---|
-| 🦐 One in a Krillion | +100 | under 2%, or a valid question nobody has asked yet |
-| 🐙 Deep Cut | +75 | 2% to under 10% |
-| 🐠 Rare | +50 | 10% to under 25% |
-| 🐟 Schooler | +25 | 25% to under 50% |
-| 🦠 Plankton | -100 | 50% or more: the obvious question everyone asks |
-| ❌ Imposter | -100 | the question doesn't lead to the answer |
+| 🦐 One in a Krillion | 100 | under 2%, or a valid question nobody has asked yet |
+| 🐙 Deep Cut | 85 | 2% to under 10% |
+| 🐠 Rare | 60 | 10% to under 25% |
+| 🐟 Schooler | 30 | 25% to under 50% |
+| 🦠 Plankton | 10 | 50% or more: the obvious question everyone asks |
+| ❌ Imposter | 0 | the question doesn't lead to the answer |
 | ⬛ Nothing | 0 | timed out with nothing real typed |
 
-The most-asked question is the worst result, and it gets better the rarer you go. Tier names and order follow Krillion.
-A perfect run is 700. Blank, symbol-only and one-word input can't be submitted; the field shakes and the
-timer keeps running.
+Tier names, order and points follow Krillion (values as listed by fan sites; check krillion.io if exact figures
+matter). A perfect run is 700 and nothing goes negative. Blank, symbol-only and one-word input can't be
+submitted; the field shakes and the timer keeps running.
 
 ## How a question is judged (`/api/judge`)
 1. The question is embedded with Workers AI (`@cf/baai/bge-base-en-v1.5`) and compared with the card's known

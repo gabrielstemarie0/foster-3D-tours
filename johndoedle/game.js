@@ -203,9 +203,8 @@ function renderResults() {
     t >= 550 ? "Absolutely one in a krillion."
     : t >= 400 ? "Deep cuts all around."
     : t >= 250 ? "A nicely off-beat mind."
-    : t >= 100 ? "Getting there. Go deeper."
-    : t >= 0 ? "Playing it safe."
-    : "Too much plankton. Think smaller.";
+    : t >= 100 ? "Staying in the shallows."
+    : "Pure plankton. Think smaller.";
   const list = $("breakdown");
   list.replaceChildren();
   today.answers.forEach((a, i) => {
