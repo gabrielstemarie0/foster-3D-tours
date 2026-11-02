@@ -20,23 +20,23 @@ real player counts; live data takes over as more people play, weight `n / (n + 1
 
 | Level | Points | Rule (share / top share) |
 |---|---|---|
-| 🦐 One in a Krillion | 100 | under 2%, or a valid question nobody has asked yet |
-| 🐙 Deep Cut | 85 | 2% to under 10% |
-| 🐠 Rare | 60 | 10% to under 25% |
-| 🐟 Schooler | 30 | 25% to under 50% |
-| 🦠 Plankton | 10 | 50% or more: the obvious question everyone asks |
+| 👽 Alien | 100 | under 2%, or a valid question nobody has asked yet |
+| 🟪 Stranger | 85 | 2% to under 10% |
+| 🟧 Neighbor | 60 | 10% to under 25% |
+| 🟨 Regular Joe | 30 | 25% to under 50% |
+| 🟩 John Doe | 10 | 50% or more: the obvious question everyone asks |
 | ❌ Imposter | 0 | the question doesn't lead to the answer |
 | ⬛ Nothing | 0 | timed out with nothing real typed |
 
-Tier names, order and points follow Krillion (values as listed by fan sites; check krillion.io if exact figures
-matter). A perfect run is 700 and nothing goes negative. Blank, symbol-only and one-word input can't be
+Points and the number of tiers follow Krillion (values as listed by fan sites; check krillion.io if exact
+figures matter). A perfect run is 700 and nothing goes negative. Blank, symbol-only and one-word input can't be
 submitted; the field shakes and the timer keeps running.
 
 ## How a question is judged (`/api/judge`)
 1. The question is embedded with Workers AI (`@cf/baai/bge-base-en-v1.5`) and compared with the card's known
    questions. If it is close to one, it is treated as the same question and scored by that question's rarity.
 2. If it is not close to a seed question, a small model (`@cf/meta/llama-3.1-8b-instruct`) is asked whether
-   the answer is a correct response. NO means Imposter; YES means a new question, so One in a Krillion.
+   the answer is a correct response. NO means Imposter; YES means a new question, so Alien.
 3. Valid questions are counted once per player per card per day (`plays` table).
 
 The similarity thresholds in `lib/judge.js` (`DENSE`) are starting points; adjust them after you've seen real

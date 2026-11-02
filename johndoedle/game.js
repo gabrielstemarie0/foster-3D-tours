@@ -200,11 +200,11 @@ function renderResults() {
   $("res-day").textContent = `John Doedle #${gameNo}`;
   $("total").textContent = t;
   $("verdict").textContent =
-    t >= 550 ? "Absolutely one in a krillion."
+    t >= 550 ? "Absolutely out of this world."
     : t >= 400 ? "Deep cuts all around."
     : t >= 250 ? "A nicely off-beat mind."
     : t >= 100 ? "Staying in the shallows."
-    : "Pure plankton. Think smaller.";
+    : "Pure John Doe. Think weirder.";
   const list = $("breakdown");
   list.replaceChildren();
   today.answers.forEach((a, i) => {
