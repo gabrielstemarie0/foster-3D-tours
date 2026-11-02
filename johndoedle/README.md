@@ -48,13 +48,14 @@ will mark many genuinely new questions as Imposter.
 1. Move this folder into its own GitHub repo (it should be the repo root).
 2. Create the database and tables:
    ```
-   npx wrangler d1 create johndoedle          # copy the database_id into wrangler.toml
+   npx wrangler d1 create johndoedle          # copy the database_id it prints
    npx wrangler d1 execute johndoedle --remote --file=schema.sql
    ```
-3. Cloudflare dashboard -> Workers & Pages -> Create -> Pages -> connect the GitHub repo.
+3. Paste that `database_id` into `wrangler.toml` and commit it. The `DB` (D1) and `AI` (Workers AI) bindings
+   are declared in that file, so Pages reads them from there. There is nothing to add on the dashboard's
+   Bindings page, which is read-only when a `wrangler.toml` is present.
+4. Cloudflare dashboard -> Workers & Pages -> Create -> Pages -> connect the GitHub repo.
    Framework preset: None, build command: empty, output directory: `/`.
-4. Pages project -> Settings -> Bindings: add a **D1 database** binding named `DB` and a **Workers AI**
-   binding named `AI`.
 5. Optional: add a custom domain.
 
 ## Daily cards
