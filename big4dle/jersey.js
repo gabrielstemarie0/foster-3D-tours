@@ -39,12 +39,9 @@ function jerseySVG(sport, t, num) {
     deco += `<rect x="90" y="166" width="120" height="8" fill="${c2}"/><rect x="90" y="178" width="120" height="4" fill="${c3}"/>`;
     deco += `<path d="M122 6Q150 24 178 6L168 6Q150 36 132 6Z" fill="${c2}"/>`;
   }
-  const size = Math.min(26, 220 / t.nick.length);
-  const ty = sport === "basketball" ? 96 : 100;
-  const text = `<text x="150" y="${ty}" text-anchor="middle" font-family="Impact,'Arial Black',sans-serif" font-weight="900" font-size="${size}" letter-spacing=".5" fill="${ink}" stroke="${edge}" stroke-width=".6">${t.nick.toUpperCase()}</text>` +
-    `<text x="150" y="${ty + 50}" text-anchor="middle" font-family="Impact,'Arial Black',sans-serif" font-weight="900" font-size="54" fill="${ink}" stroke="${edge}" stroke-width="2" paint-order="stroke">${num}</text>`;
+  const text = `<text x="150" y="${sport === "basketball" ? 118 : 124}" text-anchor="middle" font-family="Impact,'Arial Black',sans-serif" font-weight="900" font-size="70" fill="${ink}" stroke="${edge}" stroke-width="2.5" paint-order="stroke">${num}</text>`;
   const bgc = lum(c1) > .5 ? "#cfd3dc" : "#e7e9ee";
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" role="img" aria-label="${t.name} jersey">` +
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" role="img" aria-label="Mystery jersey">` +
     `<rect width="300" height="200" fill="${bgc}"/><defs><clipPath id="${id}"><path d="${body}"/></clipPath></defs>` +
     `<path d="${body}" fill="${c1}"/><g clip-path="url(#${id})">${deco}</g>` +
     `<path d="${body}" fill="none" stroke="rgba(0,0,0,.35)" stroke-width="2" stroke-linejoin="round"/>${text}</svg>`;

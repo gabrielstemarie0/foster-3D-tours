@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Jerseyle</title>
+  <title>Big4dle</title>
   <meta name="description" content="Guess the pro team from its jersey in 6 tries. Every wrong guess reveals another square.">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="top">
-    <h1>Jerseyle</h1>
+    <h1>Big4dle</h1>
     <div class="chips">
       <button class="chip" id="mode-btn" type="button">Daily</button>
       <span class="chip" title="Current streak">🔥 <b id="streak">0</b></span>
@@ -18,6 +18,10 @@
   </header>
 
   <main>
+    <div class="tabs" role="tablist" aria-label="Edition">
+      <button class="tab" id="tab-current" role="tab" type="button">Current Teams</button>
+      <button class="tab" id="tab-alltime" role="tab" type="button">All-Time</button>
+    </div>
     <p class="sub" id="sub">Name the team from its jersey. Each wrong guess reveals a square.</p>
 
     <p class="league" id="league"></p>

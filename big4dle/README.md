@@ -1,4 +1,4 @@
-# Jerseyle
+# Big4dle
 
 Flagle-style game for the big four sports leagues. 6 guesses, 6 squares; every wrong guess uncovers one more square of a mystery jersey.
 

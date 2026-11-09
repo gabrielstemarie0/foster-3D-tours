@@ -14,18 +14,18 @@
     set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
   };
 
-  let mode = "daily", sport, pool, jnum, answer, order, guesses, over, won, key;
+  let edition = "current", mode = "daily", sport, pool, jnum, answer, order, guesses, over, won, key;
 
   function setup(m) {
     mode = m;
     const seed = m === "daily" ? today() : String(Math.random()) + Date.now();
-    const r = rng(hash("jerseyle:" + seed));
+    const r = rng(hash("big4dle:" + edition + ":" + seed));
     sport = SPORTS[Math.floor(r() * SPORTS.length)];
-    pool = TEAMS[sport].teams;
+    pool = TEAMS[sport][edition];
     answer = pool[Math.floor(r() * pool.length)].name;
     jnum = 1 + Math.floor(r() * 98);
     order = shuffle([0, 1, 2, 3, 4, 5], r);
-    key = "jl-day-" + seed;
+    key = "b4-day-" + edition + "-" + seed;
     const saved = m === "daily" ? store.get(key, null) : null;
     guesses = saved ? saved.guesses : [];
     over = false; won = false;
@@ -60,24 +60,24 @@
     $("status").textContent = "";
     $("end-title").textContent = won ? `Got it in ${guesses.length}! It's ${answer}.` : `It was ${answer}.`;
     const squares = guesses.map(g => g === answer ? "🟩" : "🟥").join("") + "⬜".repeat(MAX - guesses.length);
-    $("share-text").textContent = `Jerseyle ${TEAMS[sport].emoji}${mode === "daily" ? " " + today() : ""} ${won ? guesses.length : "X"}/${MAX}\n${squares}`;
+    $("share-text").textContent = `Big4dle ${edition === "alltime" ? "All-Time " : ""}${TEAMS[sport].emoji}${mode === "daily" ? " " + today() : ""} ${won ? guesses.length : "X"}/${MAX}\n${squares}`;
     $("end").hidden = false;
     if (mode === "daily" && !restore) recordStats();
     showStats();
   }
 
   function recordStats() {
-    const s = store.get("jl-stats", { played: 0, wins: 0, streak: 0, last: "", dist: [0, 0, 0, 0, 0, 0] });
+    const s = store.get("b4-stats-" + edition, { played: 0, wins: 0, streak: 0, last: "", dist: [0, 0, 0, 0, 0, 0] });
     const y = new Date(); y.setDate(y.getDate() - 1);
     const yest = `${y.getFullYear()}-${String(y.getMonth() + 1).padStart(2, "0")}-${String(y.getDate()).padStart(2, "0")}`;
     s.played++;
     if (won) { s.wins++; s.dist[guesses.length - 1]++; s.streak = s.last === yest || s.streak === 0 ? s.streak + 1 : 1; } else s.streak = 0;
     s.last = today();
-    store.set("jl-stats", s);
+    store.set("b4-stats-" + edition, s);
   }
 
   function showStats() {
-    const s = store.get("jl-stats", { played: 0, wins: 0, streak: 0 });
+    const s = store.get("b4-stats-" + edition, { played: 0, wins: 0, streak: 0 });
     $("streak").textContent = s.streak;
     $("stats").textContent = `Played ${s.played} · Won ${s.played ? Math.round(100 * s.wins / s.played) : 0}% · Streak ${s.streak}`;
   }
@@ -120,6 +120,13 @@
   $("practice").onclick = () => setup("practice");
   $("mode-btn").onclick = () => setup(mode === "daily" ? "practice" : "daily");
 
-  showStats();
-  setup("daily");
+  function setEdition(e) {
+    edition = e;
+    $("tab-current").setAttribute("aria-selected", e === "current");
+    $("tab-alltime").setAttribute("aria-selected", e === "alltime");
+    setup("daily");
+  }
+  $("tab-current").onclick = () => setEdition("current");
+  $("tab-alltime").onclick = () => setEdition("alltime");
+  setEdition("current");
 })();
