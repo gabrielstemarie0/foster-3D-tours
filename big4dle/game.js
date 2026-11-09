@@ -21,8 +21,9 @@
     const seed = m === "daily" ? today() : String(Math.random()) + Date.now();
     const r = rng(hash("big4dle:" + edition + ":" + seed));
     sport = SPORTS[Math.floor(r() * SPORTS.length)];
-    pool = TEAMS[sport][edition];
-    answer = pool[Math.floor(r() * pool.length)].name;
+    pool = SPORTS.flatMap(s => TEAMS[s][edition]);
+    const sp = pool.filter(t => t.sport === sport);
+    answer = sp[Math.floor(r() * sp.length)].name;
     jnum = 1 + Math.floor(r() * 98);
     order = shuffle([0, 1, 2, 3, 4, 5], r);
     key = "b4-day-" + edition + "-" + seed;
@@ -31,7 +32,6 @@
     over = false; won = false;
     $("mode-btn").textContent = m === "daily" ? "Daily" : "Practice";
     $("jersey").innerHTML = jerseySVG(sport, pool.find(t => t.name === answer), jnum);
-    $("league").textContent = `${TEAMS[sport].emoji} ${TEAMS[sport].label}`;
     $("end").hidden = true;
     $("guess").value = "";
     render();
@@ -51,6 +51,8 @@
     const ol = $("guesses"); ol.innerHTML = "";
     guesses.forEach(g => { const li = document.createElement("li"); li.className = g === answer ? "ok" : "no"; li.textContent = g; ol.append(li); });
     $("status").textContent = over ? "" : `Guess ${guesses.length + 1} of ${MAX}`;
+    const a = pool.find(t => t.name === answer), n = guesses.length;
+    $("league").textContent = (over || n >= 5) ? `${TEAMS[sport].emoji} ${TEAMS[sport].label} · ${a.div}` : n >= 3 ? `${TEAMS[sport].emoji} ${TEAMS[sport].label}` : "Sport revealed after guess 3";
     $("submit").disabled = $("guess").disabled = over;
   }
 
@@ -82,11 +84,12 @@
     $("stats").textContent = `Played ${s.played} · Won ${s.played ? Math.round(100 * s.wins / s.played) : 0}% · Streak ${s.streak}`;
   }
 
-  // Autocomplete
+  // Autocomplete (narrowed to the sport once it has been revealed)
+  const candidates = () => pool.filter(t => guesses.length < 3 && !over || t.sport === sport).map(t => t.name);
   let matches = [], sel = -1;
   function options() {
     const q = $("guess").value.trim().toLowerCase();
-    matches = q ? pool.map(t => t.name).filter(n => n.toLowerCase().includes(q) && !guesses.includes(n)) : [];
+    matches = q ? candidates().filter(n => n.toLowerCase().includes(q) && !guesses.includes(n)) : [];
     
     sel = matches.length ? 0 : -1;
     const ul = $("options"); ul.innerHTML = "";
@@ -113,7 +116,7 @@
   $("form").addEventListener("submit", e => {
     e.preventDefault();
     const q = $("guess").value.trim().toLowerCase();
-    const exact = pool.map(t => t.name).find(n => n.toLowerCase() === q);
+    const exact = candidates().find(n => n.toLowerCase() === q);
     submit(exact || (sel >= 0 ? matches[sel] : null));
   });
   $("copy").onclick = async () => { try { await navigator.clipboard.writeText($("share-text").textContent); $("copy").textContent = "Copied!"; } catch { $("copy").textContent = "Copy failed"; } setTimeout(() => $("copy").textContent = "Copy result", 1500); };
