@@ -13,7 +13,7 @@ main{max-width:520px;margin:0 auto;padding:0 16px 40px}
 #jersey{position:absolute;inset:0}#jersey svg{width:100%;height:100%;display:block}
 .league{text-align:center;font-weight:700;margin:0 0 6px;font-size:18px}
 .tiles{position:absolute;inset:0;display:grid;grid-template:repeat(2,1fr)/repeat(3,1fr)}
-.tile{background:var(--cover);border:1px solid rgba(255,255,255,.25);display:grid;place-items:center;color:rgba(255,255,255,.7);font:700 28px Georgia,serif;transition:opacity .5s}
+.tile{background:linear-gradient(145deg,#2b3550,#1a2033);border:1px solid rgba(255,255,255,.14);display:grid;place-items:center;color:rgba(255,255,255,.55);font:700 26px Georgia,serif;transition:opacity .5s;box-shadow:inset 0 0 18px rgba(0,0,0,.35)}
 .tile.open{opacity:0;pointer-events:none}
 .status{min-height:1.4em;text-align:center;margin:10px 0;font-weight:600}
 form{display:flex;gap:8px}
