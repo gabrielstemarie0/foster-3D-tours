@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>State Flagle</title>
-  <meta name="description" content="Guess the US state flag in 6 tries. Every wrong guess reveals another square.">
+  <title>Jerseyle</title>
+  <meta name="description" content="Guess the pro team from its jersey in 6 tries. Every wrong guess reveals another square.">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="top">
-    <h1>State Flagle</h1>
+    <h1>Jerseyle</h1>
     <div class="chips">
       <button class="chip" id="mode-btn" type="button">Daily</button>
       <span class="chip" title="Current streak">🔥 <b id="streak">0</b></span>
@@ -18,10 +18,11 @@
   </header>
 
   <main>
-    <p class="sub" id="sub">Guess the US state flag. Each wrong guess reveals a square.</p>
+    <p class="sub" id="sub">Name the team from its jersey. Each wrong guess reveals a square.</p>
 
-    <div class="board" id="board" aria-label="Mystery flag">
-      <img id="flag" alt="" draggable="false">
+    <p class="league" id="league"></p>
+    <div class="board" id="board" aria-label="Mystery jersey">
+      <div id="jersey"></div>
       <div class="tiles" id="tiles"></div>
     </div>
 
@@ -29,7 +30,7 @@
 
     <form id="form" autocomplete="off">
       <div class="combo">
-        <input id="guess" type="text" placeholder="Type a state…" aria-label="Guess a state" spellcheck="false" autocapitalize="off">
+        <input id="guess" type="text" placeholder="Type a team…" aria-label="Guess a team" spellcheck="false" autocapitalize="off">
         <ul id="options" role="listbox" hidden></ul>
       </div>
       <button class="btn" id="submit" type="submit">Guess</button>
@@ -42,12 +43,14 @@
       <pre id="share-text" class="share"></pre>
       <div class="row">
         <button class="btn" id="copy" type="button">Copy result</button>
-        <button class="btn ghost" id="practice" type="button">Play a random flag</button>
+        <button class="btn ghost" id="practice" type="button">Play a random jersey</button>
       </div>
       <p class="stats" id="stats"></p>
     </section>
   </main>
 
+  <script src="teams.js"></script>
+  <script src="jersey.js"></script>
   <script src="game.js"></script>
 </body>
 </html>
