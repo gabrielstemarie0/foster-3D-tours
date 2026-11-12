@@ -14,7 +14,7 @@
     set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
   };
 
-  let edition = "current", mode = "daily", sport, pool, jnum, answer, order, guesses, over, won, key;
+  let edition = "current", mode = "daily", sport, pool, answer, order, guesses, over, won, key;
 
   function setup(m) {
     mode = m;
@@ -24,14 +24,13 @@
     pool = SPORTS.flatMap(s => TEAMS[s][edition]);
     const sp = pool.filter(t => t.sport === sport);
     answer = sp[Math.floor(r() * sp.length)].name;
-    jnum = 1 + Math.floor(r() * 98);
     order = shuffle([0, 1, 2, 3, 4, 5], r);
     key = "b4-day-" + edition + "-" + seed;
     const saved = m === "daily" ? store.get(key, null) : null;
     guesses = saved ? saved.guesses : [];
     over = false; won = false;
     $("mode-btn").textContent = m === "daily" ? "Daily" : "Practice";
-    $("jersey").innerHTML = jerseySVG(sport, pool.find(t => t.name === answer), jnum);
+    $("flag").innerHTML = flagSVG(pool.find(t => t.name === answer));
     $("end").hidden = true;
     $("guess").value = "";
     render();
