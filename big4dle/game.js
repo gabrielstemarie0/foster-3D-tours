@@ -62,6 +62,8 @@
     $("end-title").textContent = won ? `Got it in ${guesses.length}! It's ${answer}.` : `It was ${answer}.`;
     const squares = guesses.map(g => g === answer ? "🟩" : "🟥").join("") + "⬜".repeat(MAX - guesses.length);
     $("share-text").textContent = `Big4dle ${edition === "alltime" ? "All-Time " : ""}${TEAMS[sport].emoji}${mode === "daily" ? " " + today() : ""} ${won ? guesses.length : "X"}/${MAX}\n${squares}`;
+    const cap = pool.find(t => t.name === answer).cap;
+    $("end-detail").textContent = cap ? `${COUNTRIES[cap.country]} flag · captain/star: ${cap.name}` : "";
     $("end").hidden = false;
     if (mode === "daily" && !restore) recordStats();
     showStats();

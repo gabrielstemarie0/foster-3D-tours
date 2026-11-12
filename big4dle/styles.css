@@ -38,3 +38,4 @@ input{width:100%;padding:12px;border:1px solid var(--line);border-radius:8px;bac
 .tabs{display:flex;gap:6px;margin:0 0 12px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:4px}
 .tab{flex:1;padding:8px;border:0;border-radius:7px;background:transparent;color:var(--muted);font:600 15px system-ui;cursor:pointer}
 .tab[aria-selected="true"]{background:var(--accent);color:#fff}
+.detail{margin:0 0 8px;color:var(--muted);font-size:14px}

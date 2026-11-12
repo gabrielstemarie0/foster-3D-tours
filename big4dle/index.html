@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Big4dle</title>
-  <meta name="description" content="Guess the pro team from its colors in 6 tries. Every wrong guess reveals another square.">
+  <meta name="description" content="Guess the pro team from its colors on its captain's national flag in 6 tries. Every wrong guess reveals another square.">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -22,7 +22,7 @@
       <button class="tab" id="tab-current" role="tab" type="button">Current Teams</button>
       <button class="tab" id="tab-alltime" role="tab" type="button">All-Time</button>
     </div>
-    <p class="sub" id="sub">Name the team from its colors. Each wrong guess reveals a square.</p>
+    <p class="sub" id="sub">The team's colors are painted on the flag of its captain's country. Each wrong guess reveals a square.</p>
 
     <p class="league" id="league"></p>
     <div class="board" id="board" aria-label="Mystery flag">
@@ -44,6 +44,7 @@
 
     <section class="end" id="end" hidden>
       <h2 id="end-title"></h2>
+      <p class="detail" id="end-detail"></p>
       <pre id="share-text" class="share"></pre>
       <div class="row">
         <button class="btn" id="copy" type="button">Copy result</button>
@@ -54,6 +55,7 @@
   </main>
 
   <script src="teams.js"></script>
+  <script src="captains.js"></script>
   <script src="flag.js"></script>
   <script src="game.js"></script>
 </body>
