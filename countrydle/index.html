@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Countrydle: a daily country guessing game</title>
+<meta name="description" content="Guess the mystery country. Every guess shows continent, population, size, coastline and which way to head.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='44' fill='%232f9e57'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header>
+  <h1>Country<span>dle</span></h1>
+  <p class="sub">Find the mystery country of the day</p>
+  <div class="bar">
+    <button id="help-btn" type="button">How to play</button>
+    <button id="mode-btn" type="button" title="Switch between the daily puzzle and random practice">Daily</button>
+  </div>
+</header>
+<main>
+  <form id="guess-form" autocomplete="off">
+    <div class="combo">
+      <input id="guess" type="text" placeholder="Type a country…" aria-label="Guess a country" role="combobox" aria-expanded="false" aria-controls="options" spellcheck="false">
+      <ul id="options" role="listbox" hidden></ul>
+    </div>
+    <button type="submit" id="go">Guess</button>
+  </form>
+  <p id="status" role="status" aria-live="polite"></p>
+  <div class="scroller">
+    <div id="grid" class="grid">
+      <div class="row head"><div>Country</div><div>Continent</div><div>Population</div><div>Area</div><div>Coast</div><div>Direction</div><div>Distance</div></div>
+    </div>
+  </div>
+  <section id="end" hidden>
+    <h2 id="end-title"></h2>
+    <p id="end-text"></p>
+    <div class="actions">
+      <button id="share" type="button">Copy result</button>
+      <button id="again" type="button" hidden>Play another</button>
+    </div>
+  </section>
+</main>
+<dialog id="help">
+  <h2>How to play</h2>
+  <p>A mystery country is picked each day. Guess any country and compare it to the answer.</p>
+  <div class="legend"><span class="cell g">Match</span><span class="cell y">Close</span><span class="cell n">No match</span></div>
+  <ul>
+    <li><b>Population</b> and <b>Area</b>: ▲ means the answer is bigger, ▼ smaller. Yellow is within 25%.</li>
+    <li><b>Coast</b>: whether the country is landlocked.</li>
+    <li><b>Direction</b>: arrow from your guess's capital toward the answer's capital. <b>Distance</b> is in km; yellow is under 2,000 km.</li>
+    <li>Guesses are unlimited. The daily puzzle changes at midnight local time.</li>
+  </ul>
+  <p class="fine">Figures are rounded approximations.</p>
+  <form method="dialog"><button>Got it</button></form>
+</dialog>
+<script src="data.js"></script>
+<script src="game.js"></script>
+</body>
+</html>
