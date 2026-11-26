@@ -1,4 +1,7 @@
 cache/
+cache2/
 fetch.log
+fetch2.log
 nohup.out
 __pycache__/
+poems.json
